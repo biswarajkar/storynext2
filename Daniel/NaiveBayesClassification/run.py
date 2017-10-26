@@ -24,3 +24,37 @@ for fle in files:
         else:
             neg += 1
 print(pos, neg)
+
+# test gutenberg - positive
+folder = '../Dataset/test/gutenberg/pos/*.txt'
+files = glob.glob(folder)
+pos = 0;
+neg = 0
+for fle in files:
+    # open the file and then call .read() to get the text
+    with open(fle, "r", encoding='utf-8', errors='ignore') as f:
+        data = f.read()
+        if 'pos' == naive_classification(data):
+            pos += 1
+        else:
+            neg += 1
+print()
+print("Gutenberg POS --> [num guessed pos, num guessed neg]")
+print(pos, neg)
+
+# test gutenberg - negative
+folder = '../Dataset/test/gutenberg/neg/*.txt'
+files = glob.glob(folder)
+pos = 0;
+neg = 0
+for fle in files:
+    # open the file and then call .read() to get the text
+    with open(fle, "r", encoding='utf-8', errors='ignore') as f:
+        data = f.read()
+        if 'pos' == naive_classification(data):
+            pos += 1
+        else:
+            neg += 1
+print()
+print("Gutenberg NEG --> [num guessed pos, num guessed neg]")
+print(pos, neg)
