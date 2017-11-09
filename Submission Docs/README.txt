@@ -1,0 +1,1 @@
+This folder is only for the final version of the documents we submit for grading. Move only the final submission files in this folder, no drafts here.
