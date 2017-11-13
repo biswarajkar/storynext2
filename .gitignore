@@ -103,3 +103,6 @@ ENV/
 *.xml
 
 *.iml
+
+*_gitignore/
+Andrew/Assignment_1/.idea/.name
