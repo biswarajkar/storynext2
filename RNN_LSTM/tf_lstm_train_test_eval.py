@@ -2,22 +2,27 @@
 from rnn_preprocess_data import wordVectors
 from rnn_vectorize_training import maxReviewWordLength
 from tf_support_functions import getTrainBatch, getTestBatch, getCustomTestBatch
-import time
-from datetime import datetime
+import time, datetime
+from datetime import datetime as dt
+import matplotlib
+matplotlib.use('TkAgg')
+from pylab import *
 
 start_time = time.time()
 
-batchSize = 24
-lstmUnits = 128
-numClasses = 2  # Number of output classes
-iterations = 100000 # Number of iterations
-numDimensions = 300  # Dimensions for each word vector
+lstmUnits = 64          # Number of LSTM Units
+numClasses = 2          # Number of Output Classes
+iterations = 50000        # Number of Iterations
+numDimensions = 300     # Dimensions for each word vector
+learn_rate = 0.01      # Learning Rate for Optimizer
+batchSize = 24          # Batch Size Training/Test
+no_of_batches = 10      # No. of Test Batches
+opt_lbl='ADM'         # Optimizer Name Abbr.
+polling_interval = 1000 # Polling interval to record checkpoints during Training
 
-print("\n", str(datetime.now()), " - Started Building LSTM RNN Model - ")
+
+print("\n", str(dt.now()), " - Started Building LSTM RNN Model - ")
 import tensorflow as tf
-with tf.Session() as sess:
-    print("")
-
 tf.reset_default_graph()
 
 # Define placeholders for the Class labels and the input data
@@ -48,26 +53,31 @@ prediction = (tf.matmul(last, weight) + bias)
 correctPred = tf.equal(tf.argmax(prediction, 1), tf.argmax(labels, 1))
 accuracy = tf.reduce_mean(tf.cast(correctPred, tf.float32))
 loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=labels))
-optimizer = tf.train.AdamOptimizer().minimize(loss)
+optimizer = tf.train.AdamOptimizer(learning_rate=learn_rate).minimize(loss)
 
 
 print(time.strftime("%M:%S", time.gmtime(time.time() - start_time)), " Started Training the model")
+print("### Batch Size:", batchSize, "| LSTM Units:", lstmUnits, "| Iterations:", iterations,
+          "| Dimensions:", numDimensions, "| MaxWords:", maxReviewWordLength, "| Optimizer:", opt_lbl, learn_rate, "###")
+
 # ------------------------------
 # Train TF Model
 # ------------------------------
 sess = tf.InteractiveSession()
 sess.run(tf.global_variables_initializer())
 saver = tf.train.Saver()
+loss_array=[]
 
 for i in range(iterations):
     # Next Batch of reviews
-    nextBatch, nextBatchLabels = getTrainBatch(batchSize, maxReviewWordLength);
-    sess.run(optimizer, {input_data: nextBatch, labels: nextBatchLabels})
+    nextBatch, nextBatchLabels = getTrainBatch(batchSize, maxReviewWordLength)
+    _, loss_val = sess.run([optimizer, loss], {input_data: nextBatch, labels: nextBatchLabels})
+    loss_array.append(loss_val)
 
     # Save the network every 1,000 training iterations
-    if (i % 1000 == 0 and i != 0):
+    if (i % polling_interval == 0 and i != 0):
         save_path = saver.save(sess, "models/trained_lstm.ckpt", global_step=i)
-        print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), "Saved to %s" % save_path)
+        print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), "Saved to %s" % save_path, "| Loss: ", loss_val)
 
 print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Completed Training the model")
 
@@ -82,15 +92,48 @@ sess = tf.InteractiveSession()
 saver.restore(sess, tf.train.latest_checkpoint('models'))
 
 print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Running Model on test data")
-iterations = 10
-for i in range(iterations):
+test_accuracy_array=[]
+for i in range(no_of_batches):
     nextBatch, nextBatchLabels = getTestBatch(batchSize, maxReviewWordLength)
-    print("Accuracy for this Test batch:", (sess.run(accuracy, {input_data: nextBatch, labels: nextBatchLabels})) * 100)
+    t_acc = sess.run(accuracy, {input_data: nextBatch, labels: nextBatchLabels})
+    test_accuracy_array.append(t_acc)
+    print("Accuracy for this Test batch:", t_acc * 100)
+
 
 print("\n", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Running Model on custom tagged data")
-iterations = 10
-for i in range(iterations):
+handtag_accuracy_array=[]
+for i in range(no_of_batches):
     nextBatch, nextBatchLabels = getCustomTestBatch(batchSize, maxReviewWordLength)
-    print("Accuracy for this Custom Test batch:", (sess.run(accuracy, {input_data: nextBatch, labels: nextBatchLabels})) * 100)
+    h_acc = sess.run(accuracy, {input_data: nextBatch, labels: nextBatchLabels})
+    handtag_accuracy_array.append(h_acc)
+    print("Accuracy for this Custom Test batch:", h_acc * 100)
 
-print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), "-- Evaluation Completed --", " (", datetime.now().strftime('%Y-%m-%d %H:%M:%S'), ")")
+# Plot the Loss Function
+import matplotlib.pyplot as plt_loss
+plt_loss.plot(arange(0.0, iterations, 1), loss_array)
+plt_loss.xlabel('Number of Iterations')
+plt_loss.ylabel('Loss')
+plt_loss.title('Loss Variations: LSTMs ' + lstmUnits.__str__() + ' | MaxWords ' + maxReviewWordLength.__str__()
+               + ' | Optimizer ' + opt_lbl + learn_rate.__str__())
+plt_loss.grid(True)
+plt_loss.savefig('plots/Loss_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
+                 + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__() + '.png', bbox_inches='tight', dpi=500)
+plt_loss.show()
+plt_loss.close()
+
+# Plot the Accuracy Function
+import matplotlib.pyplot as plt_accu
+plt_accu.plot(arange(0.0, no_of_batches, 1), test_accuracy_array)
+plt_accu.plot(arange(0.0, no_of_batches, 1), handtag_accuracy_array, linestyle="--")
+plt_accu.xlabel('Number of Batches')
+plt_accu.ylabel('Accuracy')
+plt_accu.title('Accuracy Variations: LSTMs ' + lstmUnits.__str__() + ' | Iterations ' + iterations.__str__()
+               + ' | MaxWords ' + maxReviewWordLength.__str__() + ' | Optimizer ' + opt_lbl + learn_rate.__str__())
+plt_accu.grid(True)
+plt_accu.savefig('plots/Accuracy_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
+                 + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__() + '.png', bbox_inches='tight', dpi=300)
+plt_accu.show()
+plt_accu.close()
+
+print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), "-- Evaluation Completed --",
+      " (", dt.now().strftime('%Y-%m-%d %H:%M:%S'), ")")

@@ -1,9 +1,11 @@
 import numpy as np
 import time
-from datetime import datetime
+from datetime import datetime as dt
+import matplotlib
+matplotlib.use('TkAgg')
 
 start_time = time.time()
-print("\n", str(datetime.now()), " - Start Test Data Processing - ")
+print("\n", str(dt.now()), " - Start Test Data Processing - ")
 
 # Define a function to pre-process data and get data statistics
 # Load a list of 4,00,000 words from the GloVe Dataset (as a numpy array)
@@ -57,11 +59,19 @@ def cleanSentences(string):
     string = string.lower().replace("<br />", " ")
     return re.sub(strip_special_chars, "", string.lower())
 
-
 start_time = time.time()
 print("\n - Vectorizing all Test Articles Started - ")
 
-# Most articles have less than 250 words, put an upper bound
+# Plot the Word Distribution
+import matplotlib.pyplot as plt_test
+plt_test.hist(numTestWords, 20)
+plt_test.xlabel('No. of words in Document')
+plt_test.ylabel('Frequency')
+plt_test.title('Frequency Distribution of ' + sum(numTestWords).__str__() + ' words in ' + numTestFiles.__str__() + ' Test Files')
+plt_test.savefig('plots/TestDataWordDistribution.png')
+plt_test.close()
+
+# Most articles have less than 300 words, put an upper bound
 maxArticleWordLength = 300
 
 # ------------------------------
@@ -119,5 +129,5 @@ np.save('vectorizedTestMatrix', test_ids)
 # Save the Matrix representing all test file labels (true labels)
 np.save('trueTestLabels', true_test_labels)
 
-print(time.strftime("%M:%S", time.gmtime(time.time() - start_time)), "-- Vectorized Test Saved --", " (", datetime.now().strftime('%Y-%m-%d %H:%M:%S'), ")")
+print(time.strftime("%M:%S", time.gmtime(time.time() - start_time)), "-- Vectorized Test Saved --", " (", dt.now().strftime('%Y-%m-%d %H:%M:%S'), ")")
 
