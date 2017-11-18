@@ -1,8 +1,10 @@
 import numpy as np, time
-from datetime import datetime
+from datetime import datetime as dt
+import matplotlib
+matplotlib.use('TkAgg')
 
 start_time = time.time()
-print("\n", str(datetime.now()), " - Load Word Lists and GloVe Vectors - ")
+print("\n", str(dt.now()), " - Load Word Lists and GloVe Vectors - ")
 
 # Define a function to pre-process data and get data statistics
 # Load a list of 4,00,000 words from the GloVe Dataset (as a numpy array)
@@ -26,7 +28,7 @@ negativeFiles = ['negativeReviews/' + f for f in listdir('negativeReviews/') if 
 # ------------------------------
 # Get Training Corpus Statistics
 # ------------------------------
-numWords = []
+numTrainingWords = []
 print(time.strftime("%M:%S", time.gmtime(time.time() - start_time)), " Pre-processing Input reviews!")
 
 # Read each file from the Positive Reviews Folder
@@ -34,16 +36,29 @@ for pf in positiveFiles:
     with open(pf, "r", encoding='utf-8') as f:
         line = f.readline()
         counter = len(line.split())
-        numWords.append(counter)
+        numTrainingWords.append(counter)
 # Read each file from the Negative Reviews Folder
 for nf in negativeFiles:
     with open(nf, "r", encoding='utf-8') as f:
         line = f.readline()
         counter = len(line.split())
-        numWords.append(counter)
-numFiles = len(numWords)
-print('The total number of files is', numFiles)
-print('The total number of words in the files is', sum(numWords))
+        numTrainingWords.append(counter)
+numTrainingFiles = len(numTrainingWords)
+print('The total number of files is', numTrainingFiles)
+print('The total number of words in the files is', sum(numTrainingWords))
 
-print(time.strftime("%M:%S", time.gmtime(time.time() - start_time)), " -- Pre-Processing Training data finished --", " (", datetime.now().strftime('%Y-%m-%d %H:%M:%S'), ")")
+# Plot the Word Distribution
+import matplotlib.pyplot as plt_tr
+plt_tr.hist(numTrainingWords, 50)
+plt_tr.xlabel('No of words on File')
+plt_tr.ylabel('Frequency')
+plt_tr.title('Frequency Distribution of ' + sum(numTrainingWords).__str__()
+             + ' words in ' + numTrainingFiles.__str__() + ' Training Files')
+plt_tr.savefig('plots/TrainingDataWordDistribution.png')
+plt_tr.close()
+
+# Most Reviews have less than 300 words, put an upper bound
+maxReviewWordLength = 300
+
+print(time.strftime("%M:%S", time.gmtime(time.time() - start_time)), " -- Pre-Processing Training data finished --", " (", dt.now().strftime('%Y-%m-%d %H:%M:%S'), ")")
 
