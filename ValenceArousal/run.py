@@ -1,7 +1,7 @@
 import glob
 #import matlab
 
-from Andrew.ValenceArousal.sentiment_classifier import SentimentClassifier
+from ValenceArousal.sentiment_classifier import SentimentClassifier
 from nltk.tokenize import sent_tokenize
 
 
@@ -50,6 +50,8 @@ def report_test(pos_folder, neg_folder):
     neg_neg = neg_test[1]
     neg_pos = neg_test[0]
 
+    accuracy = (pos_pos + neg_neg) / (pos_pos + pos_neg + neg_neg + neg_pos)
+
     print('Precision, Recall, and F1 for POSITIVE test_gitignore:')
     precision = pos_pos / (pos_pos + neg_pos)
     recall = pos_pos / (pos_pos + pos_neg)
@@ -60,13 +62,19 @@ def report_test(pos_folder, neg_folder):
 
     print()
 
-    print('Precision, Recall, and F1 for NEGATIVE test_gitignore:')
+    print('Precision, Recall and F1 for NEGATIVE test_gitignore:')
     precision = neg_neg / (neg_neg + pos_neg)
     recall = neg_neg / (neg_neg + neg_pos)
     f1 = (2 * precision * recall) / (precision + recall)
     print('Precision: ' + str(precision))
     print('Recall: ' + str(recall))
     print('F1: ' + str(f1))
+
+    print()
+
+    print('Total Accuracy: ' + str(accuracy))
+
+
 
 
 report_test('data/test_gitignore/positive/*.txt', 'data/test_gitignore/negative/*.txt')
