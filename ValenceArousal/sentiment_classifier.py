@@ -34,6 +34,7 @@ class SentimentClassifier:
     def classify_document(self, sentences):
         all_sentence_mean_valences = []
         all_sentence_mean_arousals = []
+        all_sentences = []
 
         for sentence in sentences:
             words = word_tokenize(sentence.lower())
@@ -58,15 +59,18 @@ class SentimentClassifier:
                     a_freq_sum = int(word_data['a_freq_sum'])
                     a_means_and_stds_and_freqs.append([a_mean_sum, a_sd_sum, a_freq_sum])
 
-            v_weighted_mean = weighted_mean(v_means_and_stds_and_freqs)
-            a_weighted_mean = weighted_mean(a_means_and_stds_and_freqs)
-            all_sentence_mean_valences.append(v_weighted_mean)
-            all_sentence_mean_arousals.append(a_weighted_mean)
+            if v_means_and_stds_and_freqs and a_means_and_stds_and_freqs:
+                all_sentences.append(sentence)
+                v_weighted_mean = weighted_mean(v_means_and_stds_and_freqs)
+                a_weighted_mean = weighted_mean(a_means_and_stds_and_freqs)
+                all_sentence_mean_valences.append(v_weighted_mean)
+                all_sentence_mean_arousals.append(a_weighted_mean)
 
         return {
             'classification': self.classify(all_sentence_mean_valences, all_sentence_mean_arousals),
             'mean_valences': all_sentence_mean_valences,
-            'mean_arousals': all_sentence_mean_arousals
+            'mean_arousals': all_sentence_mean_arousals,
+            'sentences': all_sentences
         }
 
     def is_not_token(self, token):
