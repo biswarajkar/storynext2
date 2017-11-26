@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="../bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="../Chart.min.js"></script>
+        <script src="../chartjs-plugin-annotation.js"></script>
+        <script src="../mean_valence_and_arousals.js"></script>
+        <script src="../js/test_charts.js"></script>
+    </head>
+    <body>
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-8">
+                <canvas id="testChart" style="height:400px;width:content-box"></canvas>
+            </div>
+            <div class="col-2">
+            </div>
+        </div>
+
+        <div class="row" style="padding-top:50px">
+            <div class="offset-2 col-8">
+                <b>Valence:     </b><div id="valence_tooltip" style="display:inline"></div>
+                <br>
+                <b>Arousal:     </b><div id="arousal_tooltip" style="display:inline"></div>
+                <br>
+                <b>Sentence:     </b><div id="sentence_tooltip" style="display:inline"></div>
+            </div>
+        </div>
+
+    </body>
+</html>

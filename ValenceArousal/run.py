@@ -1,7 +1,8 @@
 import glob
+import json
 #import matlab
 
-from Andrew.ValenceArousal.sentiment_classifier import SentimentClassifier
+from ValenceArousal.sentiment_classifier import SentimentClassifier
 from nltk.tokenize import sent_tokenize
 
 
@@ -13,6 +14,7 @@ def run_test(folder):
 
     mean_valences = []
     mean_arousals = []
+    sentences = []
     for fle in files:
         # open the file and then call .read() to get the text
         with open(fle, "r", encoding='utf-8', errors='ignore') as f:
@@ -26,12 +28,28 @@ def run_test(folder):
             else:
                 neg += 1
 
+            for sentence in result['sentences']:
+                sentences.append(sentence)
             for mv in result['mean_valences']:
                 mean_valences.append(mv)
             for ma in result['mean_arousals']:
                 mean_arousals.append(ma)
 
     #matlab.scatter(mean_valences, mean_arousals)
+    with open('data/test_gitignore/mean_valence_and_arousals.js', 'w+', encoding='utf-8', errors='ignore') as f:
+        valence_and_arousals = []
+        for i in range(0, len(mean_valences)):
+            m_v = mean_valences[i]
+            m_a = mean_arousals[i]
+            sentence = sentences[i]
+            data_point = {
+                'x': m_a,
+                'y': m_v,
+                'sentence': sentence
+            }
+            valence_and_arousals.append(data_point)
+        f.write("var v_and_a = " + json.dumps(valence_and_arousals) + ";")
+
     return [pos, neg]
 
 
@@ -50,6 +68,8 @@ def report_test(pos_folder, neg_folder):
     neg_neg = neg_test[1]
     neg_pos = neg_test[0]
 
+    accuracy = (pos_pos + neg_neg) / (pos_pos + pos_neg + neg_neg + neg_pos)
+
     print('Precision, Recall, and F1 for POSITIVE test_gitignore:')
     precision = pos_pos / (pos_pos + neg_pos)
     recall = pos_pos / (pos_pos + pos_neg)
@@ -60,13 +80,19 @@ def report_test(pos_folder, neg_folder):
 
     print()
 
-    print('Precision, Recall, and F1 for NEGATIVE test_gitignore:')
+    print('Precision, Recall and F1 for NEGATIVE test_gitignore:')
     precision = neg_neg / (neg_neg + pos_neg)
     recall = neg_neg / (neg_neg + neg_pos)
     f1 = (2 * precision * recall) / (precision + recall)
     print('Precision: ' + str(precision))
     print('Recall: ' + str(recall))
     print('F1: ' + str(f1))
+
+    print()
+
+    print('Total Accuracy: ' + str(accuracy))
+
+
 
 
 report_test('data/test_gitignore/positive/*.txt', 'data/test_gitignore/negative/*.txt')
