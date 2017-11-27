@@ -1,4 +1,4 @@
-from sentiment_classification import run
+from SVM.sentiment_classification import run
 
-dir = '/Users/LingZhang/Documents/CS6120/SVM/Dataset'
+dir = '/Users/LingZhang/Documents/CS6120/storynext2/SVM/Dataset'
 run(dir)

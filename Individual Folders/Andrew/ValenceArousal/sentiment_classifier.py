@@ -2,7 +2,7 @@ import csv
 import numpy
 
 from nltk.tokenize import word_tokenize
-from Andrew.ValenceArousal.formulas import weighted_mean
+from .formulas import weighted_mean
 
 
 class SentimentClassifier:

@@ -14,6 +14,7 @@ import time
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import svm
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 
 
@@ -59,22 +60,23 @@ def run(dir):
     # max_df = 0.8, discard words appering in more than 80 % of the documents
     # sublinear_tf = True, use sublinear weighting
     # use_idf = True, enable IDF
-    vectorizer = TfidfVectorizer(min_df=5,
+    vectorizer = TfidfVectorizer(max_features=40000,
+                                 min_df=5,
                                  max_df=0.8,
                                  sublinear_tf=True,
                                  use_idf=True)
     train_vectors = vectorizer.fit_transform(train_data)
     test_vectors = vectorizer.transform(test_data)
 
-    # Perform classification with SVM, kernel=rbf
-    classifier_rbf = svm.SVC()
-    t0 = time.time()
-    classifier_rbf.fit(train_vectors, train_labels)
-    t1 = time.time()
-    prediction_rbf = classifier_rbf.predict(test_vectors)
-    t2 = time.time()
-    time_rbf_train = t1 - t0
-    time_rbf_predict = t2 - t1
+    # # Perform classification with SVM, kernel=rbf
+    # classifier_rbf = svm.SVC()
+    # t0 = time.time()
+    # classifier_rbf.fit(train_vectors, train_labels)
+    # t1 = time.time()
+    # prediction_rbf = classifier_rbf.predict(test_vectors)
+    # t2 = time.time()
+    # time_rbf_train = t1 - t0
+    # time_rbf_predict = t2 - t1
 
     # Perform classification with SVM, kernel=linear
     classifier_linear = svm.SVC(kernel='linear')
@@ -86,38 +88,43 @@ def run(dir):
     time_linear_train = t1 - t0
     time_linear_predict = t2 - t1
 
-    # Perform classification with SVM, kernel=linear
-    classifier_liblinear = svm.LinearSVC()
+    # # Perform classification with SVM, kernel=linear
+    # classifier_liblinear = svm.LinearSVC()
+    # t0 = time.time()
+    # classifier_liblinear.fit(train_vectors, train_labels)
+    # t1 = time.time()
+    # prediction_liblinear = classifier_liblinear.predict(test_vectors)
+    # t2 = time.time()
+    # time_liblinear_train = t1 - t0
+    # time_liblinear_predict = t2 - t1
+
+    # Perform classification with RandomForest
+    classifier_rdf = RandomForestClassifier(n_estimators = 100, n_jobs = -1, verbose = 1)
     t0 = time.time()
-    classifier_liblinear.fit(train_vectors, train_labels)
+    classifier_rdf.fit(train_vectors, train_labels)
     t1 = time.time()
-    prediction_liblinear = classifier_liblinear.predict(test_vectors)
+    prediction_rdf = classifier_rdf.predict(test_vectors)
     t2 = time.time()
-    time_liblinear_train = t1 - t0
-    time_liblinear_predict = t2 - t1
+    time_rdf_train = t1 - t0
+    time_rdf_predict = t2 - t1
 
     # Print results in a nice table
-    print("Results for SVC(kernel=rbf)")
-    print("Training time: %fs; Prediction time: %fs" % (time_rbf_train, time_rbf_predict))
-    print(classification_report(test_labels, prediction_rbf))
+    # print("Results for SVC(kernel=rbf)")
+    # print("Training time: %fs; Prediction time: %fs" % (time_rbf_train, time_rbf_predict))
+    # print(classification_report(test_labels, prediction_rbf))
     print("Results for SVC(kernel=linear)")
     print("Training time: %fs; Prediction time: %fs" % (time_linear_train, time_linear_predict))
     print(classification_report(test_labels, prediction_linear))
-    print("Results for LinearSVC()")
-    print("Training time: %fs; Prediction time: %fs" % (time_liblinear_train, time_liblinear_predict))
-    print(classification_report(test_labels, prediction_liblinear))
+    # print("Results for LinearSVC()")
+    # print("Training time: %fs; Prediction time: %fs" % (time_liblinear_train, time_liblinear_predict))
+    # print(classification_report(test_labels, prediction_liblinear))
+    print("Results for RandomForest")
+    print("Training time: %fs; Prediction time: %fs" % (time_rdf_train, time_rdf_predict))
+    print(classification_report(test_labels, prediction_rdf))
 
-# Results for SVC(kernel=rbf)
-# Training time: 5.164954s; Prediction time: 0.360977s
-#              precision    recall  f1-score   support
-#
-#         neg       0.53      0.25      0.34        75
-#         pos       0.51      0.78      0.62        76
-#
-# avg / total       0.52      0.52      0.48       151
-#
+# Total:
 # Results for SVC(kernel=linear)
-# Training time: 5.006144s; Prediction time: 0.296542s
+# Training time: 5.282428s; Prediction time: 0.269310s
 #              precision    recall  f1-score   support
 #
 #         neg       0.60      0.53      0.56        75
@@ -125,11 +132,68 @@ def run(dir):
 #
 # avg / total       0.59      0.59      0.59       151
 #
-# Results for LinearSVC()
-# Training time: 0.054336s; Prediction time: 0.000749s
+# Results for RandomForest
+# Training time: 0.849757s; Prediction time: 0.106429s
 #              precision    recall  f1-score   support
 #
-#         neg       0.59      0.49      0.54        75
-#         pos       0.57      0.66      0.61        76
+#         neg       0.62      0.32      0.42        75
+#         pos       0.54      0.80      0.65        76
 #
-# avg / total       0.58      0.58      0.57       151
+# avg / total       0.58      0.56      0.54       151
+
+# Sport:
+# Results for SVC(kernel=linear)
+# Training time: 4.865517s; Prediction time: 0.220716s
+#              precision    recall  f1-score   support
+#
+#         neg       0.78      0.53      0.63        75
+#         pos       0.29      0.56      0.38        25
+#
+# avg / total       0.66      0.54      0.57       100
+#
+# Results for RandomForest
+# Training time: 0.736891s; Prediction time: 0.106315s
+#              precision    recall  f1-score   support
+#
+#         neg       0.75      0.36      0.49        75
+#         pos       0.25      0.64      0.36        25
+#
+# avg / total       0.62      0.43      0.45       100
+
+# Literrature:
+# Results for SVC(kernel=linear)
+# Training time: 4.982864s; Prediction time: 0.171225s
+#              precision    recall  f1-score   support
+#
+#         neg       0.77      0.53      0.63        75
+#         pos       0.29      0.54      0.37        26
+#
+# avg / total       0.64      0.53      0.56       101
+#
+# Results for RandomForest
+# Training time: 0.801408s; Prediction time: 0.105362s
+#              precision    recall  f1-score   support
+#
+#         neg       0.78      0.24      0.37        75
+#         pos       0.27      0.81      0.40        26
+#
+# avg / total       0.65      0.39      0.38       101
+
+# Politics:
+# Results for SVC(kernel=linear)
+# Training time: 5.652754s; Prediction time: 0.211159s
+#              precision    recall  f1-score   support
+#
+#         neg       0.91      0.53      0.67        75
+#         pos       0.38      0.84      0.52        25
+#
+# avg / total       0.78      0.61      0.63       100
+#
+# Results for RandomForest
+# Training time: 0.782652s; Prediction time: 0.113840s
+#              precision    recall  f1-score   support
+#
+#         neg       0.90      0.25      0.40        75
+#         pos       0.29      0.92      0.44        25
+#
+# avg / total       0.75      0.42      0.41       100

@@ -1,7 +1,7 @@
 import glob
-#import matlab
-
-from Andrew.ValenceArousal.sentiment_classifier import SentimentClassifier
+import matlab
+PACKAGE_PARENT = '.'
+from .sentiment_classifier import SentimentClassifier
 from nltk.tokenize import sent_tokenize
 
 
@@ -31,7 +31,7 @@ def run_test(folder):
             for ma in result['mean_arousals']:
                 mean_arousals.append(ma)
 
-    #matlab.scatter(mean_valences, mean_arousals)
+    matlab.scatter(mean_valences, mean_arousals)
     return [pos, neg]
 
 
