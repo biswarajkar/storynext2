@@ -100,7 +100,7 @@ $(document).ready(function() {
                             max: 9
                         }
                     }]
-                },
+                }/*,
                 pan: {
                     // Boolean to enable panning
                     enabled: true,
@@ -116,7 +116,7 @@ $(document).ready(function() {
                     // Zooming directions. Remove the appropriate direction to disable
                     // Eg. 'y' would only allow zooming in the y direction
                     mode: 'xy',
-                }
+                }*/
             }
         };
     };
@@ -137,8 +137,8 @@ $(document).ready(function() {
 
     var label_cb_for_all_sentences = function(tooltipItem, data) {
         dataObject = data.datasets[0].data[tooltipItem.index];
-        var string = "Arousal: " + dataObject.x +
-        ", Valence: " + dataObject.y
+        var string = "Arousal: " + dataObject.y +
+        ", Valence: " + dataObject.x
         return string
     };
 
@@ -152,8 +152,8 @@ $(document).ready(function() {
 
     var label_cb_for_per_doc = function(tooltipItem, data) {
         dataObject = data.datasets[0].data[tooltipItem.index];
-        var string = "Arousal: " + dataObject.x +
-        ", Valence: " + dataObject.y
+        var string = "Arousal: " + dataObject.y +
+        ", Valence: " + dataObject.x
         return string
     };
 
