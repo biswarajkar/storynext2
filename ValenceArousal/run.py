@@ -1,12 +1,13 @@
 import glob
 import json
+import numpy
 #import matlab
 
 from ValenceArousal.sentiment_classifier import SentimentClassifier
 from nltk.tokenize import sent_tokenize
 
 
-def run_test(folder):
+def run_test(folder, results_file_suffix):
     files = glob.glob(folder)
     pos = 0
     neg = 0
@@ -15,6 +16,11 @@ def run_test(folder):
     mean_valences = []
     mean_arousals = []
     sentences = []
+
+    mean_valences_per_doc = []
+    mean_arousals_per_doc = []
+    sentences_per_doc = []
+
     for fle in files:
         # open the file and then call .read() to get the text
         with open(fle, "r", encoding='utf-8', errors='ignore') as f:
@@ -28,6 +34,10 @@ def run_test(folder):
             else:
                 neg += 1
 
+            mean_valences_per_doc.append(result['mean_valences'])
+            mean_arousals_per_doc.append(result['mean_arousals'])
+            sentences_per_doc.append([result['sentences']])
+
             for sentence in result['sentences']:
                 sentences.append(sentence)
             for mv in result['mean_valences']:
@@ -36,26 +46,39 @@ def run_test(folder):
                 mean_arousals.append(ma)
 
     #matlab.scatter(mean_valences, mean_arousals)
-    with open('data/test_gitignore/mean_valence_and_arousals.js', 'w+', encoding='utf-8', errors='ignore') as f:
+    with open('out/mean_valence_and_arousals_' + results_file_suffix + ".js", 'w+', encoding='utf-8', errors='ignore') as f:
         valence_and_arousals = []
         for i in range(0, len(mean_valences)):
             m_v = mean_valences[i]
             m_a = mean_arousals[i]
             sentence = sentences[i]
             data_point = {
-                'x': m_a,
-                'y': m_v,
+                'x': m_v,
+                'y': m_a,
                 'sentence': sentence
             }
             valence_and_arousals.append(data_point)
-        f.write("var v_and_a = " + json.dumps(valence_and_arousals) + ";")
+        f.write("var v_and_a_" + results_file_suffix + " = " + json.dumps(valence_and_arousals) + ";")
+
+    with open('out/mean_valence_and_arousals_per_doc_' + results_file_suffix + '.js', 'w+', encoding='utf-8', errors='ignore') as f:
+        valence_and_arousals = []
+        for i in range(0, len(mean_valences_per_doc)):
+            m_v = numpy.mean(mean_valences_per_doc[i])
+            m_a = numpy.mean(mean_arousals_per_doc[i])
+            sentence = sentences[i]
+            data_point = {
+                'x': m_v,
+                'y': m_a
+            }
+            valence_and_arousals.append(data_point)
+        f.write("var v_and_a_per_doc_" + results_file_suffix+ " = " + json.dumps(valence_and_arousals) + ";")
 
     return [pos, neg]
 
 
 def report_test(pos_folder, neg_folder):
-    pos_test = run_test(pos_folder)
-    neg_test = run_test(neg_folder)
+    pos_test = run_test(pos_folder, 'pos')
+    neg_test = run_test(neg_folder, 'neg')
 
     print('POS TEST: ' + str(pos_test[0] + pos_test[1]) + ' documents')
     print('POS: ' + str(pos_test[0]) + ', NEG: ' + str(pos_test[1]))
@@ -95,4 +118,4 @@ def report_test(pos_folder, neg_folder):
 
 
 
-report_test('data/test_gitignore/positive/*.txt', 'data/test_gitignore/negative/*.txt')
+report_test('../hand_tagged/positive/*.txt', '../hand_tagged/negative/*.txt')

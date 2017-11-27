@@ -4,29 +4,43 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="../Chart.min.js"></script>
         <script src="../chartjs-plugin-annotation.js"></script>
-        <script src="../mean_valence_and_arousals.js"></script>
+        <script src="../mean_valence_and_arousals_pos.js"></script>
+        <script src="../mean_valence_and_arousals_neg.js"></script>
+        <script src="../mean_valence_and_arousals_per_doc_neg.js"></script>
+        <script src="../mean_valence_and_arousals_per_doc_pos.js"></script>
+
         <script src="../js/test_charts.js"></script>
     </head>
     <body>
-        <div class="row">
-            <div class="col-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <canvas id="pos_test_all" style="height:400px;width:content-box"></canvas>
+                </div>
+
+
+                <div class="col-6">
+                    <canvas id="pos_test_doc" style="height:400px;width:content-box"></canvas>
+                </div>
             </div>
-            <div class="col-8">
-                <canvas id="testChart" style="height:400px;width:content-box"></canvas>
-            </div>
-            <div class="col-2">
+            <div class="row" style="padding-top:50px">
+                <div class="col-6">
+                    <b>Valence:     </b><div id="pos_test_all_valence_tooltip" style="display:inline"></div>
+                    <br>
+                    <b>Arousal:     </b><div id="pos_test_all_arousal_tooltip" style="display:inline"></div>
+                    <br>
+                    <b>Sentence:     </b><div id="pos_test_all_sentence_tooltip" style="display:inline"></div>
+                </div>
+
+
+                <div class="col-6">
+                    <b>Valence:     </b><div id="pos_test_doc_valence_tooltip" style="display:inline"></div>
+                    <br>
+                    <b>Arousal:     </b><div id="pos_test_doc_arousal_tooltip" style="display:inline"></div>
+                    <br>
+                    <b>Sentence:     </b><div id="pos_test_doc_sentence_tooltip" style="display:inline"></div>
+                </div>
             </div>
         </div>
-
-        <div class="row" style="padding-top:50px">
-            <div class="offset-2 col-8">
-                <b>Valence:     </b><div id="valence_tooltip" style="display:inline"></div>
-                <br>
-                <b>Arousal:     </b><div id="arousal_tooltip" style="display:inline"></div>
-                <br>
-                <b>Sentence:     </b><div id="sentence_tooltip" style="display:inline"></div>
-            </div>
-        </div>
-
     </body>
 </html>
