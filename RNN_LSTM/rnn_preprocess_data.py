@@ -8,13 +8,13 @@ print("\n", str(dt.now()), " - Load Word Lists and GloVe Vectors - ")
 
 # Define a function to pre-process data and get data statistics
 # Load a list of 4,00,000 words from the GloVe Dataset (as a numpy array)
-wordsList = np.load('wordsList.npy')
+wordsList = np.load('processing/wordsList.npy')
 print('Loaded the word list!')
 # Convert the wordList from numpy array to a list
 wordsList = wordsList.tolist()
 wordsList = [word.decode('UTF-8') for word in wordsList]  # Encode words as UTF-8
 # Load the word vectors for the words (50 dimension vector for each word)
-wordVectors = np.load('wordVectors.npy')
+wordVectors = np.load('processing/wordVectors.npy')
 print('Loaded the word vectors!')
 
 # Process the Training data (IMDB 25k movie reviews, 12.5k pos : 12.5 neg)

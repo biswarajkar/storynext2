@@ -1,0 +1,72 @@
+
+ 2017-11-17 07:26:19.711875  - Started Building LSTM RNN Model - 
+00:14  Started Training the model
+### Batch Size: 24 | LSTM Units: 64 | Iterations: 20000 | Dimensions: 300 | MaxWords: 300 | Optimizer: ADM 0.1 ###
+00:08:49 Saved to models/trained_lstm.ckpt-1000 | Loss:  0.764653
+00:17:07 Saved to models/trained_lstm.ckpt-2000 | Loss:  0.797801
+00:25:23 Saved to models/trained_lstm.ckpt-3000 | Loss:  0.811157
+00:33:40 Saved to models/trained_lstm.ckpt-4000 | Loss:  0.933131
+00:41:56 Saved to models/trained_lstm.ckpt-5000 | Loss:  0.644386
+00:50:15 Saved to models/trained_lstm.ckpt-6000 | Loss:  0.995849
+00:58:32 Saved to models/trained_lstm.ckpt-7000 | Loss:  0.818079
+01:06:51 Saved to models/trained_lstm.ckpt-8000 | Loss:  0.893615
+01:15:10 Saved to models/trained_lstm.ckpt-9000 | Loss:  0.752321
+01:23:26 Saved to models/trained_lstm.ckpt-10000 | Loss:  0.868329
+01:31:44 Saved to models/trained_lstm.ckpt-11000 | Loss:  0.703442
+01:40:02 Saved to models/trained_lstm.ckpt-12000 | Loss:  0.901189
+01:48:23 Saved to models/trained_lstm.ckpt-13000 | Loss:  0.773874
+01:56:40 Saved to models/trained_lstm.ckpt-14000 | Loss:  0.981008
+02:04:55 Saved to models/trained_lstm.ckpt-15000 | Loss:  0.775103
+02:13:12 Saved to models/trained_lstm.ckpt-16000 | Loss:  0.758458
+02:21:36 Saved to models/trained_lstm.ckpt-17000 | Loss:  0.716796
+02:29:52 Saved to models/trained_lstm.ckpt-18000 | Loss:  0.832254
+02:38:07 Saved to models/trained_lstm.ckpt-19000 | Loss:  0.84162
+02:46:25  Completed Training the model
+02:46:26  Running Model on partitioned test data
+Accuracy for this Test batch: 54.1666686535
+Accuracy for this Test batch: 45.8333343267
+Accuracy for this Test batch: 50.0
+Accuracy for this Test batch: 45.8333343267
+Accuracy for this Test batch: 45.8333343267
+Accuracy for this Test batch: 41.6666656733
+Accuracy for this Test batch: 58.3333313465
+Accuracy for this Test batch: 37.5
+Accuracy for this Test batch: 54.1666686535
+Accuracy for this Test batch: 50.0
+
+ 2017-11-17 10:12:48.388706  - Vectorizing all Hand-tagged Test Articles Started - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 152
+The total number of words in the Test files is 3870
+
+ Processing Hand-tagged Corpus
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Hand-tagged Test Saved --  ( 2017-11-17 10:12:51 )
+
+ 2017-11-17 10:12:51.285179  - Vectorizing all Hand-tagged Test Articles Started - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 152
+The total number of words in the Test files is 3870
+
+ Processing Hand-tagged Corpus
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Hand-tagged Test Saved --  ( 2017-11-17 10:12:53 )
+
+ 02:46:33  Running Model on hand tagged data
+Accuracy for this Custom Test batch: 41.6666656733
+Accuracy for this Custom Test batch: 41.6666656733
+Accuracy for this Custom Test batch: 37.5
+Accuracy for this Custom Test batch: 54.1666686535
+Accuracy for this Custom Test batch: 54.1666686535
+Accuracy for this Custom Test batch: 62.5
+Accuracy for this Custom Test batch: 62.5
+Accuracy for this Custom Test batch: 50.0
+Accuracy for this Custom Test batch: 62.5
+Accuracy for this Custom Test batch: 58.3333313465
+10:53:06 -- Evaluation Completed --  ( 2017-11-17 18:19:26 )

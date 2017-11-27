@@ -1,0 +1,24 @@
+
+ 2017-11-16 16:47:39.367793  - Started Building LSTM RNN Model - 
+00:15  Started Training the model
+### Batch Size: 24 | LSTM Units: 64 | Iterations: 50000 | Dimensions: 300 | MaxWords: 300 | Optimizer: ADM 0.01 ###
+00:00:16  Running Model on partitioned test data
+Accuracy for this Test batch: 50.0
+Accuracy for this Test batch: 41.6666656733
+Accuracy for this Test batch: 54.1666686535
+Accuracy for this Test batch: 66.6666686535
+Accuracy for this Test batch: 66.6666686535
+Accuracy for this Test batch: 50.0
+Accuracy for this Test batch: 37.5
+Accuracy for this Test batch: 45.8333343267
+Accuracy for this Test batch: 50.0
+Accuracy for this Test batch: 25.0
+
+ 2017-11-16 16:47:58.068409  - Vectorizing all Hand-tagged Test Articles Started - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 126
+The total number of words in the Test files is 3601
+
+ Processing Hand-tagged Corpus

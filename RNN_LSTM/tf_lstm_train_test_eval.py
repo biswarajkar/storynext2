@@ -2,23 +2,31 @@
 from rnn_preprocess_data import wordVectors
 from rnn_vectorize_training import maxReviewWordLength
 from tf_support_functions import getTrainBatch, getTestBatch, getCustomTestBatch
-import time, datetime
+import time, os
 from datetime import datetime as dt
 import matplotlib
 matplotlib.use('TkAgg')
 from pylab import *
 
+# Capture Program Start Time
 start_time = time.time()
 
-lstmUnits = 64          # Number of LSTM Units
-numClasses = 2          # Number of Output Classes
-iterations = 50000        # Number of Iterations
-numDimensions = 300     # Dimensions for each word vector
-learn_rate = 0.01      # Learning Rate for Optimizer
-batchSize = 24          # Batch Size Training/Test
-no_of_batches = 10      # No. of Test Batches
-opt_lbl='ADM'         # Optimizer Name Abbr.
-polling_interval = 1000 # Polling interval to record checkpoints during Training
+# Code to capture all console output to a file
+from capture_run import Tee
+f = open('logs/'+os.path.basename(sys.argv[0]).strip(".py")+'_'+time.strftime("%Y%m%d-%H%M%S")+'_out.txt', 'w')
+original = sys.stdout
+sys.stdout = Tee(sys.stdout, f)
+
+# Parameter Definitions
+lstmUnits = 64           # Number of LSTM Units
+numClasses = 2           # Number of Output Classes
+iterations = 70000       # Number of Iterations
+numDimensions = 300      # Dimensions for each word vector
+learn_rate = 0.1         # Learning Rate for Optimizer
+batchSize = 24           # Batch Size Training/Test
+no_of_batches = 10       # No. of Test Batches
+opt_lbl='GRDSC'          # Optimizer Name Abbr.
+polling_interval = 1000  # Polling interval to record checkpoints during Training
 
 
 print("\n", str(dt.now()), " - Started Building LSTM RNN Model - ")
@@ -40,7 +48,7 @@ lstmCell = tf.contrib.rnn.BasicLSTMCell(lstmUnits)
 lstmCell = tf.contrib.rnn.DropoutWrapper(cell=lstmCell, output_keep_prob=0.75)
 
 # RNN Processing
-# value will have the last Hidden state vector
+# Value will have the last Hidden state vector
 value, _ = tf.nn.dynamic_rnn(lstmCell, data, dtype=tf.float32)
 
 weight = tf.Variable(tf.truncated_normal([lstmUnits, numClasses]))
@@ -53,12 +61,12 @@ prediction = (tf.matmul(last, weight) + bias)
 correctPred = tf.equal(tf.argmax(prediction, 1), tf.argmax(labels, 1))
 accuracy = tf.reduce_mean(tf.cast(correctPred, tf.float32))
 loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=labels))
-optimizer = tf.train.AdamOptimizer(learning_rate=learn_rate).minimize(loss)
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=learn_rate).minimize(loss)
 
 
 print(time.strftime("%M:%S", time.gmtime(time.time() - start_time)), " Started Training the model")
 print("### Batch Size:", batchSize, "| LSTM Units:", lstmUnits, "| Iterations:", iterations,
-          "| Dimensions:", numDimensions, "| MaxWords:", maxReviewWordLength, "| Optimizer:", opt_lbl, learn_rate, "###")
+      "| Dimensions:", numDimensions, "| MaxWords:", maxReviewWordLength, "| Optimizer:", opt_lbl, learn_rate, "###")
 
 # ------------------------------
 # Train TF Model
@@ -66,24 +74,29 @@ print("### Batch Size:", batchSize, "| LSTM Units:", lstmUnits, "| Iterations:",
 sess = tf.InteractiveSession()
 sess.run(tf.global_variables_initializer())
 saver = tf.train.Saver()
-loss_array=[]
+loss_array = np.zeros(iterations, dtype='int32')
 
 for i in range(iterations):
     # Next Batch of reviews
     nextBatch, nextBatchLabels = getTrainBatch(batchSize, maxReviewWordLength)
     _, loss_val = sess.run([optimizer, loss], {input_data: nextBatch, labels: nextBatchLabels})
-    loss_array.append(loss_val)
+    loss_array[i] = loss_val*100
 
-    # Save the network every 1,000 training iterations
+    # Save the network every 'polling_interval' number of training iterations
     if (i % polling_interval == 0 and i != 0):
         save_path = saver.save(sess, "models/trained_lstm.ckpt", global_step=i)
         print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), "Saved to %s" % save_path, "| Loss: ", loss_val)
+
+# Save the Loss Values
+np.save('processing/loss_array_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
+        + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__(), loss_array)
 
 print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Completed Training the model")
 
 # ------------------------------
 # Run TF Model on Test
 # ------------------------------
+
 # 2 Sessions: current session and saved model session
 saver = tf.train.Saver()
 sess = tf.InteractiveSession()
@@ -91,7 +104,8 @@ sess = tf.InteractiveSession()
 # saver.restore(sess, 'models/pretrained_lstm.ckpt-90000')
 saver.restore(sess, tf.train.latest_checkpoint('models'))
 
-print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Running Model on test data")
+
+print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Running Model on partitioned test data")
 test_accuracy_array=[]
 for i in range(no_of_batches):
     nextBatch, nextBatchLabels = getTestBatch(batchSize, maxReviewWordLength)
@@ -99,8 +113,11 @@ for i in range(no_of_batches):
     test_accuracy_array.append(t_acc)
     print("Accuracy for this Test batch:", t_acc * 100)
 
+# Vectorize Hand-tagged Test Data
+from rnn_vectorize_test import vectorizeTest
+vectorizeTest()
 
-print("\n", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Running Model on custom tagged data")
+print("\n", time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Running Model on hand tagged data")
 handtag_accuracy_array=[]
 for i in range(no_of_batches):
     nextBatch, nextBatchLabels = getCustomTestBatch(batchSize, maxReviewWordLength)
@@ -109,8 +126,10 @@ for i in range(no_of_batches):
     print("Accuracy for this Custom Test batch:", h_acc * 100)
 
 # Plot the Loss Function
+loss_array = np.load('processing/loss_array_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
+        + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__()+'.npy')
 import matplotlib.pyplot as plt_loss
-plt_loss.plot(arange(0.0, iterations, 1), loss_array)
+plt_loss.plot(arange(0.0, iterations, 1), loss_array.tolist())
 plt_loss.xlabel('Number of Iterations')
 plt_loss.ylabel('Loss')
 plt_loss.title('Loss Variations: LSTMs ' + lstmUnits.__str__() + ' | MaxWords ' + maxReviewWordLength.__str__()

@@ -1,0 +1,147 @@
+
+ 2017-11-16 16:31:15.230537  - Started Building LSTM RNN Model - 
+00:15  Started Training the model
+### Batch Size: 24 | LSTM Units: 64 | Iterations: 50000 | Dimensions: 300 | MaxWords: 300 | Optimizer: ADM 0.01 ###
+00:00:16  Running Model on test data
+Accuracy for this Test batch: 54.1666686535
+Accuracy for this Test batch: 50.0
+Accuracy for this Test batch: 37.5
+Accuracy for this Test batch: 45.8333343267
+Accuracy for this Test batch: 33.3333343267
+Accuracy for this Test batch: 62.5
+Accuracy for this Test batch: 50.0
+Accuracy for this Test batch: 33.3333343267
+Accuracy for this Test batch: 41.6666656733
+Accuracy for this Test batch: 50.0
+
+ 00:00:18  Running Model on custom tagged data
+
+ 2017-11-16 16:31:34.079028  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:31:36 )
+Accuracy for this Custom Test batch: 62.5
+
+ 2017-11-16 16:31:36.297506  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:31:38 )
+Accuracy for this Custom Test batch: 41.6666656733
+
+ 2017-11-16 16:31:38.273299  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:31:40 )
+Accuracy for this Custom Test batch: 41.6666656733
+
+ 2017-11-16 16:31:40.263651  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:31:42 )
+Accuracy for this Custom Test batch: 58.3333313465
+
+ 2017-11-16 16:31:42.254415  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:31:44 )
+Accuracy for this Custom Test batch: 41.6666656733
+
+ 2017-11-16 16:31:44.240525  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:31:46 )
+Accuracy for this Custom Test batch: 41.6666656733
+
+ 2017-11-16 16:31:46.255267  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:31:48 )
+Accuracy for this Custom Test batch: 54.1666686535
+
+ 2017-11-16 16:31:48.233925  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:31:50 )
+Accuracy for this Custom Test batch: 50.0
+
+ 2017-11-16 16:31:50.227138  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:31:52 )
+Accuracy for this Custom Test batch: 54.1666686535
+
+ 2017-11-16 16:31:52.201639  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:31:54 )
+Accuracy for this Custom Test batch: 50.0
