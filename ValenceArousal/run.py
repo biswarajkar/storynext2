@@ -6,6 +6,15 @@ import numpy
 from ValenceArousal.sentiment_classifier import SentimentClassifier
 from nltk.tokenize import sent_tokenize
 
+def get_domain(filename):
+    if 'gutenberg' in filename:
+        return '[LITERATURE]'
+    if 'news' in filename:
+        return '[NEWS]'
+    if 'sports' in filename:
+        return '[SPORTS]'
+    else:
+        return '[UNKNOWN]'
 
 def run_test(folder, results_file_suffix):
     files = glob.glob(folder)
@@ -16,14 +25,17 @@ def run_test(folder, results_file_suffix):
     mean_valences = []
     mean_arousals = []
     sentences = []
+    domains_per_doc = []
 
     mean_valences_per_doc = []
     mean_arousals_per_doc = []
     sentences_per_doc = []
+    domains = []
 
     for fle in files:
         # open the file and then call .read() to get the text
         with open(fle, "r", encoding='utf-8', errors='ignore') as f:
+            domain = get_domain(f.name)
             data = f.read()
             data = data.replace('\n', ' ')
             sent_tokenize_list = sent_tokenize(data)
@@ -37,9 +49,11 @@ def run_test(folder, results_file_suffix):
             mean_valences_per_doc.append(result['mean_valences'])
             mean_arousals_per_doc.append(result['mean_arousals'])
             sentences_per_doc.append([result['sentences']])
+            domains_per_doc.append(domain)
 
             for sentence in result['sentences']:
                 sentences.append(sentence)
+                domains.append(domain)
             for mv in result['mean_valences']:
                 mean_valences.append(mv)
             for ma in result['mean_arousals']:
@@ -52,10 +66,12 @@ def run_test(folder, results_file_suffix):
             m_v = mean_valences[i]
             m_a = mean_arousals[i]
             sentence = sentences[i]
+            domain = domains[i]
             data_point = {
                 'x': m_v,
                 'y': m_a,
-                'sentence': sentence
+                'sentence': sentence,
+                'domain': domain
             }
             valence_and_arousals.append(data_point)
         f.write("var v_and_a_" + results_file_suffix + " = " + json.dumps(valence_and_arousals) + ";")
@@ -66,9 +82,11 @@ def run_test(folder, results_file_suffix):
             m_v = numpy.mean(mean_valences_per_doc[i])
             m_a = numpy.mean(mean_arousals_per_doc[i])
             sentence = sentences[i]
+            domain = domains_per_doc[i]
             data_point = {
                 'x': m_v,
-                'y': m_a
+                'y': m_a,
+                'domain': domain
             }
             valence_and_arousals.append(data_point)
         f.write("var v_and_a_per_doc_" + results_file_suffix+ " = " + json.dumps(valence_and_arousals) + ";")
