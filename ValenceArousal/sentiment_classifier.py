@@ -4,7 +4,7 @@ import numpy
 from nltk.tokenize import word_tokenize
 from ValenceArousal.formulas import weighted_mean
 from ValenceArousal.formulas import reverse_valence
-
+from nltk.tokenize import sent_tokenize
 
 class SentimentClassifier:
 
@@ -81,4 +81,35 @@ class SentimentClassifier:
     def classify(self, mean_valences, mean_arousals):
         mean_valence = numpy.mean(mean_valences)
         return 'pos' if mean_valence >= 5 else 'neg'
+
+
+
+    def for_raj(self, document_str):
+        result = {
+            'positive': [],
+            'negative': []
+        }
+        words = word_tokenize(document_str.lower())
+        for idx, word in enumerate(words):
+            if word in result['positive'] or word in result['negative']:
+                continue
+
+            data = self.data
+            if word in data:
+                word_data = data[word]
+                v_mean_sum = float(word_data['v_mean_sum'])
+                a_mean_sum = float(word_data['a_mean_sum'])
+
+                # if previous word is a 'not' token, then reverse the valence
+                if (idx > 0 and self.is_not_token(words[idx - 1])):
+                    v_mean_sum = reverse_valence(v_mean_sum)
+
+                if self.classify([v_mean_sum], [a_mean_sum]) == 'pos':
+                    result['positive'].append(word)
+                else:
+                    result['negative'].append(word)
+
+        return result
+
+
 
