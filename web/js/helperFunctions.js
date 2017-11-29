@@ -40,14 +40,14 @@ function populateSentimentWords(){
     ajax_request(pos_sentiment_path).then(function(result_p) {
         document.getElementById(pos_element).value=result_p;
     }).catch(function() {
-        console.log("Error evaluating positive sentiment files, all default sentiments returned");
+        console.log("Error loading positive sentiment files, all default sentiments returned");
         document.getElementById(pos_element).value="";
     });
 
     ajax_request(neg_sentiment_path).then(function(result_n) {
         document.getElementById(neg_element).value=result_n;
     }).catch(function() {
-        console.log("Error evaluating negative sentiment files, all default sentiments returned");
+        console.log("Error loading negative sentiment files, all default sentiments returned");
         document.getElementById(neg_element).value="";
     });
 }
