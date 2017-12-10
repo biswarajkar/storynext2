@@ -1,0 +1,77 @@
+
+ 2017-11-16 03:26:25.151334  - Started Building LSTM RNN Model - 
+00:17  Started Training the model
+### Batch Size: 24 | LSTM Units: 64 | Iterations: 50000 | Dimensions: 300 | MaxWords: 300 | Optimizer: ADM 0.01 ###
+00:09:36 Saved to models/trained_lstm.ckpt-1000 | Loss:  0.946238
+00:18:03 Saved to models/trained_lstm.ckpt-2000 | Loss:  0.655152
+00:27:05 Saved to models/trained_lstm.ckpt-3000 | Loss:  0.700304
+00:35:39 Saved to models/trained_lstm.ckpt-4000 | Loss:  0.704786
+00:44:10 Saved to models/trained_lstm.ckpt-5000 | Loss:  0.370672
+00:53:54 Saved to models/trained_lstm.ckpt-6000 | Loss:  0.450243
+01:02:36 Saved to models/trained_lstm.ckpt-7000 | Loss:  0.339911
+01:11:47 Saved to models/trained_lstm.ckpt-8000 | Loss:  0.337842
+01:20:14 Saved to models/trained_lstm.ckpt-9000 | Loss:  0.275863
+01:28:49 Saved to models/trained_lstm.ckpt-10000 | Loss:  0.210757
+01:37:44 Saved to models/trained_lstm.ckpt-11000 | Loss:  0.613383
+01:46:23 Saved to models/trained_lstm.ckpt-12000 | Loss:  0.397019
+01:54:40 Saved to models/trained_lstm.ckpt-13000 | Loss:  0.411225
+02:02:24 Saved to models/trained_lstm.ckpt-14000 | Loss:  0.487843
+02:10:09 Saved to models/trained_lstm.ckpt-15000 | Loss:  0.314279
+02:19:06 Saved to models/trained_lstm.ckpt-16000 | Loss:  0.704034
+02:27:33 Saved to models/trained_lstm.ckpt-17000 | Loss:  0.713838
+02:36:58 Saved to models/trained_lstm.ckpt-18000 | Loss:  0.709739
+02:46:12 Saved to models/trained_lstm.ckpt-19000 | Loss:  0.725416
+02:55:35 Saved to models/trained_lstm.ckpt-20000 | Loss:  0.690845
+03:04:54 Saved to models/trained_lstm.ckpt-21000 | Loss:  0.726741
+03:14:15 Saved to models/trained_lstm.ckpt-22000 | Loss:  0.745211
+03:23:58 Saved to models/trained_lstm.ckpt-23000 | Loss:  0.673209
+03:32:37 Saved to models/trained_lstm.ckpt-24000 | Loss:  0.691829
+03:41:49 Saved to models/trained_lstm.ckpt-25000 | Loss:  0.657758
+03:52:05 Saved to models/trained_lstm.ckpt-26000 | Loss:  0.655097
+04:01:17 Saved to models/trained_lstm.ckpt-27000 | Loss:  0.713015
+04:09:55 Saved to models/trained_lstm.ckpt-28000 | Loss:  0.673678
+04:18:29 Saved to models/trained_lstm.ckpt-29000 | Loss:  0.710384
+04:26:31 Saved to models/trained_lstm.ckpt-30000 | Loss:  0.726915
+04:34:31 Saved to models/trained_lstm.ckpt-31000 | Loss:  0.657263
+04:42:34 Saved to models/trained_lstm.ckpt-32000 | Loss:  0.6555
+04:50:35 Saved to models/trained_lstm.ckpt-33000 | Loss:  0.697821
+04:58:35 Saved to models/trained_lstm.ckpt-34000 | Loss:  0.673965
+05:06:35 Saved to models/trained_lstm.ckpt-35000 | Loss:  0.666442
+05:14:34 Saved to models/trained_lstm.ckpt-36000 | Loss:  0.71752
+05:22:35 Saved to models/trained_lstm.ckpt-37000 | Loss:  0.677606
+05:30:35 Saved to models/trained_lstm.ckpt-38000 | Loss:  0.660308
+05:38:35 Saved to models/trained_lstm.ckpt-39000 | Loss:  0.667468
+05:46:34 Saved to models/trained_lstm.ckpt-40000 | Loss:  0.683273
+05:54:36 Saved to models/trained_lstm.ckpt-41000 | Loss:  0.739755
+06:02:37 Saved to models/trained_lstm.ckpt-42000 | Loss:  0.706684
+06:10:42 Saved to models/trained_lstm.ckpt-43000 | Loss:  0.696084
+06:18:44 Saved to models/trained_lstm.ckpt-44000 | Loss:  0.673191
+06:26:44 Saved to models/trained_lstm.ckpt-45000 | Loss:  0.710968
+06:34:46 Saved to models/trained_lstm.ckpt-46000 | Loss:  0.676881
+06:42:47 Saved to models/trained_lstm.ckpt-47000 | Loss:  0.701521
+06:50:50 Saved to models/trained_lstm.ckpt-48000 | Loss:  0.710094
+06:58:50 Saved to models/trained_lstm.ckpt-49000 | Loss:  0.672731
+07:06:50  Completed Training the model
+07:06:51  Running Model on test data
+Accuracy for this Test batch: 54.1666686535
+Accuracy for this Test batch: 62.5
+Accuracy for this Test batch: 62.5
+Accuracy for this Test batch: 54.1666686535
+Accuracy for this Test batch: 41.6666656733
+Accuracy for this Test batch: 41.6666656733
+Accuracy for this Test batch: 50.0
+Accuracy for this Test batch: 45.8333343267
+Accuracy for this Test batch: 45.8333343267
+Accuracy for this Test batch: 45.8333343267
+
+ 07:06:53  Running Model on custom tagged data
+Accuracy for this Custom Test batch: 33.3333343267
+Accuracy for this Custom Test batch: 58.3333313465
+Accuracy for this Custom Test batch: 29.1666656733
+Accuracy for this Custom Test batch: 54.1666686535
+Accuracy for this Custom Test batch: 50.0
+Accuracy for this Custom Test batch: 33.3333343267
+Accuracy for this Custom Test batch: 66.6666686535
+Accuracy for this Custom Test batch: 45.8333343267
+Accuracy for this Custom Test batch: 29.1666656733
+Accuracy for this Custom Test batch: 41.6666656733

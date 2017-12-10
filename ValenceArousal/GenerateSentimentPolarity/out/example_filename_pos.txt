@@ -1,0 +1,3 @@
+string
+good
+happy

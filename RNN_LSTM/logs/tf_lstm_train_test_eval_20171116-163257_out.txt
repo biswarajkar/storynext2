@@ -1,0 +1,39 @@
+
+ 2017-11-16 16:32:57.088953  - Started Building LSTM RNN Model - 
+00:17  Started Training the model
+### Batch Size: 24 | LSTM Units: 64 | Iterations: 50000 | Dimensions: 300 | MaxWords: 300 | Optimizer: ADM 0.01 ###
+
+ 2017-11-16 16:33:14.245588  - Start Test Data Processing - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 101
+The total number of words in the Test files is 3366
+
+ - Vectorizing all Test Articles Started - 
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Test Saved --  ( 2017-11-16 16:33:16 )
+00:00:20  Running Model on test data
+Accuracy for this Test batch: 62.5
+Accuracy for this Test batch: 37.5
+Accuracy for this Test batch: 58.3333313465
+Accuracy for this Test batch: 37.5
+Accuracy for this Test batch: 41.6666656733
+Accuracy for this Test batch: 62.5
+Accuracy for this Test batch: 66.6666686535
+Accuracy for this Test batch: 50.0
+Accuracy for this Test batch: 54.1666686535
+Accuracy for this Test batch: 66.6666686535
+
+ 00:00:22  Running Model on custom tagged data
+Accuracy for this Custom Test batch: 58.3333313465
+Accuracy for this Custom Test batch: 58.3333313465
+Accuracy for this Custom Test batch: 58.3333313465
+Accuracy for this Custom Test batch: 58.3333313465
+Accuracy for this Custom Test batch: 50.0
+Accuracy for this Custom Test batch: 50.0
+Accuracy for this Custom Test batch: 66.6666686535
+Accuracy for this Custom Test batch: 62.5
+Accuracy for this Custom Test batch: 50.0
+Accuracy for this Custom Test batch: 66.6666686535

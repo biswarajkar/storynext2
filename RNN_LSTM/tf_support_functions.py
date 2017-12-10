@@ -1,8 +1,7 @@
 import numpy as np
 from random import randint
 
-training_ids = np.load('vectorizedTrainingMatrix.npy')
-test_ids = np.load('vectorizedTestMatrix.npy')
+training_ids = np.load('processing/vectorizedTrainingMatrix.npy')
 
 # Use 23000 Reviews (Review# 1 to 11500 and 13500 to 25000) as Training
 def getTrainBatch(batchSize, maxReviewWordLength):
@@ -38,7 +37,8 @@ def getTestBatch(batchSize, maxReviewWordLength):
 
 # Use hand-tagged data as Test
 def getCustomTestBatch(batchSize, maxReviewWordLength):
-    test_labels = np.load('trueTestLabels.npy')
+    test_ids = np.load('processing/vectorizedTestMatrix.npy')
+    test_labels = np.load('processing/trueTestLabels.npy')
 
     labels = []
     arr = np.zeros([batchSize, maxReviewWordLength])
