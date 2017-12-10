@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
     var pos_test_all = $('#pos_test_all');
-    var pos_test_doc = $('#pos_test_doc');
+    var pos_test_per_word = $('#pos_test_per_word');
     var neg_test_all = $('#neg_test_all');
     var neg_test_doc = $('#neg_test_doc');
 
@@ -35,7 +35,7 @@ $(document).ready(function() {
             lineAtIndex: [5],
             options: {
                 tooltips: {
-                    mode: 'point',
+                    mode: 'nearest',
                     bodySpacing: 8,
                     callbacks: {
                         afterBody: afterBody_cb,
@@ -139,22 +139,22 @@ $(document).ready(function() {
         dataObject = data.datasets[0].data[tooltipItem.index];
         var string = "Arousal: " + (Math.round(dataObject.y*100)/100) +
         ", Valence: " + (Math.round(dataObject.x*100)/100)
-        return string
+        return string;
     };
 
-    var after_body_cb_for_per_doc = function(prefix) {
+    var after_body_cb_for_per_word = function(prefix) {
         return function(tooltipItems, data) {
             setTooltip(prefix, dataObject.y, dataObject.x, dataObject.domain, '');
             dataObject = data.datasets[0].data[tooltipItems[0].index];
-            return dataObject.domain
+            return dataObject.word;
         };
     };
 
-    var label_cb_for_per_doc = function(tooltipItem, data) {
+    var label_cb_for_per_word = function(tooltipItem, data) {
         dataObject = data.datasets[0].data[tooltipItem.index];
         var string = "Arousal: " + (Math.round(dataObject.y*100)/100) +
         ", Valence: " + (Math.round(dataObject.x*100)/100)
-        return string
+        return string;
     };
 
     var gradientStroke = document.getElementById('pos_test_all').getContext("2d").createLinearGradient(30, 0, 520, 0);
@@ -164,9 +164,9 @@ $(document).ready(function() {
 
 
     var pos_test_all_colors = [];
-    var pos_test_doc_colors = [];
+    var pos_test_per_word_colors = [];
     var pos_test_all;
-    var pos_test_doc;
+    var pos_test_per_word;
 
     var init_charts = function() {
     //    ajax_request('js/mean_valence_and_arousals_pos.js').then(function(va_pos) {
@@ -174,21 +174,21 @@ $(document).ready(function() {
     //            generateChartOptions(pos_test_all, 'Positive Test -- All sentences', va_pos.v_and_a_pos, 'pos_test_all',
     //                after_body_cb_for_all_sentences('pos_test_all'), label_cb_for_all_sentences, pos_test_all_colors));
     //    }).then(function() {
-    //        pos_test_doc = new Chart(pos_test_doc,
-    //            generateChartOptions(pos_test_doc, 'Positive Test -- By Document', v_and_a_per_doc_pos, 'pos_test_doc',
-    //                after_body_cb_for_per_doc('pos_test_doc'), label_cb_for_per_doc, pos_test_doc_colors));
+    //        pos_test_per_word = new Chart(pos_test_per_word,
+    //            generateChartOptions(pos_test_per_word, 'Positive Test -- By Document', v_and_a_per_doc_pos, 'pos_test_per_word',
+    //                after_body_cb_for_per_doc('pos_test_per_word'), label_cb_for_per_doc, pos_test_per_word_colors));
     //    });
     };
 
 
 
    pos_test_all = new Chart(pos_test_all,
-        generateChartOptions(pos_test_all, 'Positive Test -- All sentences', v_and_a_pos, 'pos_test_all',
+        generateChartOptions(pos_test_all, 'Per Sentence', v_and_a_pos, 'pos_test_all',
             after_body_cb_for_all_sentences('pos_test_all'), label_cb_for_all_sentences, pos_test_all_colors));
 
-   pos_test_doc = new Chart(pos_test_doc,
-        generateChartOptions(pos_test_doc, 'Positive Test -- By Document', v_and_a_per_doc_pos, 'pos_test_doc',
-            after_body_cb_for_per_doc('pos_test_doc'), label_cb_for_per_doc, pos_test_doc_colors));
+   pos_test_per_word = new Chart(pos_test_per_word,
+        generateChartOptions(pos_test_per_word, 'Per Word', v_and_a_pos_per_word, 'pos_test_per_word',
+            after_body_cb_for_per_word('pos_test_per_word'), label_cb_for_per_word, pos_test_per_word_colors));
 
 
     var chart_colors = function(chart, colors) {
@@ -212,7 +212,7 @@ $(document).ready(function() {
     var refresh_charts = function() {
         // Set chart colors
         chart_colors(pos_test_all, pos_test_all_colors);
-        chart_colors(pos_test_doc, pos_test_doc_colors);
+        chart_colors(pos_test_per_word, pos_test_per_word_colors);
     };
 
     init_charts();

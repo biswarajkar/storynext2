@@ -31,6 +31,7 @@ def run_test(folder, results_file_suffix):
     mean_arousals_per_doc = []
     sentences_per_doc = []
     domains = []
+    words_per_result = []
 
     for fle in files:
         # open the file and then call .read() to get the text
@@ -51,6 +52,8 @@ def run_test(folder, results_file_suffix):
             sentences_per_doc.append([result['sentences']])
             domains_per_doc.append(domain)
 
+            for sentence_words in result['words']:
+                words_per_result.append(sentence_words)
             for sentence in result['sentences']:
                 sentences.append(sentence)
                 domains.append(domain)
@@ -71,10 +74,24 @@ def run_test(folder, results_file_suffix):
                 'x': m_v,
                 'y': m_a,
                 'sentence': sentence,
-                'domain': domain
+                'domain': domain,
             }
             valence_and_arousals.append(data_point)
         f.write("var v_and_a_" + results_file_suffix + " = " + json.dumps(valence_and_arousals) + ";")
+
+
+    with open('out/mean_valence_and_arousals_' + results_file_suffix + "_per_word.js", 'w+', encoding='utf-8', errors='ignore') as f:
+        valence_and_arousals = []
+        for i in range(0, len(mean_valences)):
+            words = words_per_result[i]
+            for w in words:
+                data_point = {
+                    'x': w['valence'],
+                    'y': w['arousal'],
+                    'word': w['word']
+                }
+                valence_and_arousals.append(data_point)
+        f.write("var v_and_a_" + results_file_suffix + "_per_word = " + json.dumps(valence_and_arousals) + ";")
 
     with open('out/mean_valence_and_arousals_per_doc_' + results_file_suffix + '.js', 'w+', encoding='utf-8', errors='ignore') as f:
         valence_and_arousals = []
