@@ -35,11 +35,13 @@ class SentimentClassifier:
         all_sentence_mean_valences = []
         all_sentence_mean_arousals = []
         all_sentences = []
+        all_words_per_sentence = []
 
         for sentence in sentences:
             words = word_tokenize(sentence.lower())
             v_means_and_stds_and_freqs = []
             a_means_and_stds_and_freqs = []
+            words_v_and_a = []
             for idx, word in enumerate(words):
                 data = self.data
                 if word in data:
@@ -59,7 +61,10 @@ class SentimentClassifier:
                     a_freq_sum = int(word_data['a_freq_sum'])
                     a_means_and_stds_and_freqs.append([a_mean_sum, a_sd_sum, a_freq_sum])
 
+                    words_v_and_a.append({'word': word, 'arousal': a_mean_sum, 'valence': v_mean_sum})
+
             if v_means_and_stds_and_freqs and a_means_and_stds_and_freqs:
+                all_words_per_sentence.append(words_v_and_a)
                 all_sentences.append(sentence)
                 v_weighted_mean = weighted_mean(v_means_and_stds_and_freqs)
                 a_weighted_mean = weighted_mean(a_means_and_stds_and_freqs)
@@ -70,6 +75,7 @@ class SentimentClassifier:
             'classification': self.classify(all_sentence_mean_valences, all_sentence_mean_arousals),
             'mean_valences': all_sentence_mean_valences,
             'mean_arousals': all_sentence_mean_arousals,
+            'words': all_words_per_sentence,
             'sentences': all_sentences
         }
 

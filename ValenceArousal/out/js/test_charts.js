@@ -179,5 +179,4 @@ $(document).ready(function() {
         generateChartOptions(neg_test_doc, 'Negative Test -- By Document', v_and_a_per_doc_neg, 'neg_test_doc',
             after_body_cb_for_per_doc('neg_test_doc'), label_cb_for_per_doc));
 
-
 });
