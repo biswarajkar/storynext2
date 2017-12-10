@@ -122,40 +122,55 @@
 <div id="viz-area">
 
         <div id="word_cloud_container" class="container">
+            <!-- word cloud & per-sentence/per-word sentiments -->
             <div class="row">
-                <div class="col-md-8">
+                <div class="col-md-7" style="margin-top:22px">
                     <div style="" id="wordcloud"></div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <div class="row">
                         <div class="col-md-12">
-                            <canvas id="pos_test_all" style="height:400px;width:content-box"></canvas>
+                            <canvas id="per_sentence_sentiment" style="height:400px;width:content-box"></canvas>
                         </div>
-
-
-
                     </div>
                     <div class="row" style="padding-top:50px">
                         <div class="col-md-12">
-                            <canvas id="pos_test_per_word" style="height:400px;width:content-box"></canvas>
+                            <canvas id="per_word_sentiment" style="height:200px;width:content-box"></canvas>
                         </div>
                         <!-- Tool tips
                         <div class="col-md-6">
-                            <b>Valence:     </b><div id="pos_test_all_valence_tooltip" style="display:inline"></div>
+                            <b>Valence:     </b><div id="per_sentence_sentiment_valence_tooltip" style="display:inline"></div>
                             <br>
-                            <b>Arousal:     </b><div id="pos_test_all_arousal_tooltip" style="display:inline"></div>
+                            <b>Arousal:     </b><div id="per_sentence_sentiment_arousal_tooltip" style="display:inline"></div>
                             <br>
-                            <b>Sentence:     </b><div id="pos_test_all_sentence_tooltip" style="display:inline"></div>
+                            <b>Sentence:     </b><div id="per_sentence_sentiment_sentence_tooltip" style="display:inline"></div>
                         </div>
                         <div class="col-md-6">
-                            <b>Valence:     </b><div id="pos_test_per_word_valence_tooltip" style="display:inline"></div>
+                            <b>Valence:     </b><div id="per_word_sentiment_valence_tooltip" style="display:inline"></div>
                             <br>
-                            <b>Arousal:     </b><div id="pos_test_per_word_arousal_tooltip" style="display:inline"></div>
+                            <b>Arousal:     </b><div id="per_word_sentiment_arousal_tooltip" style="display:inline"></div>
                             <br>
-                            <b>Domain:     </b><div id="pos_test_per_word_sentence_tooltip" style="display:inline"></div>
+                            <b>Domain:     </b><div id="per_word_sentiment_sentence_tooltip" style="display:inline"></div>
                         </div>
                         -->
                     </div>
+                </div>
+            </div>
+
+            <hr style="clear: both">
+
+
+            <!-- Slider Area -->
+            <div id="silider-area">
+                <b>Percentage of Words Displayed:</b>
+                <input type="range" min=0, max="100", step="2", value="100" id="slider" style="slider"/>
+                <output id="slider">100%</output>
+            </div>
+
+            <!-- sentiment-over-time analysis -->
+            <div class="row" style="margin-top:60px">
+                <div class="col-md-12">
+                    <canvas id="sentiment-over-time-chart" style="height:400px;width:content-box"></canvas>
                 </div>
             </div>
 
@@ -163,15 +178,7 @@
         
 </div>
 
-<hr style="clear: both">
 
-
-<!-- Slider Area -->
-<div id="silider-area">
-    <b>Percentage of Words Displayed:</b>
-    <input type="range" min=0, max="100", step="2", value="100" id="slider" style="slider"/>
-    <output id="slider">100%</output>
-</div>
 
 
 <hr style="clear: both">
@@ -225,7 +232,7 @@
     var viz_element_width=document.getElementById(cloud_element).getBoundingClientRect().width;
     var cloud_padding=5;
     var cloud_rotation=10;
-    var viz_height=750;
+    var viz_height=650;
     var viz_width=400;
     var def_cloud_color = d3.scale.category20();    //Default Cloud Color Range (Cat 20)
     var def_sentiment_col = d3.scale.linear()

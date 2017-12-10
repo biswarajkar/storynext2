@@ -1,9 +1,8 @@
 $(document).ready(function() {
 
-    var pos_test_all = $('#pos_test_all');
-    var pos_test_per_word = $('#pos_test_per_word');
-    var neg_test_all = $('#neg_test_all');
-    var neg_test_doc = $('#neg_test_doc');
+    var per_sentence_sentiment_ref = $('#per_sentence_sentiment');
+    var per_word_sentiment_ref = $('#per_word_sentiment');
+    var sentiment_over_time_ref = $('#sentiment-over-time-chart');
 
 
     var setTooltip = function(prefix, valence, arousal, sentence, domain) {
@@ -125,7 +124,7 @@ $(document).ready(function() {
         return function(tooltipItems, data) {
             dataObject = data.datasets[0].data[tooltipItems[0].index];
             // display valence, arousal, and sentence on browser
-            setTooltip(prefix, dataObject.y, dataObject.x, dataObject.sentence, dataObject.domain);
+            //setTooltip(prefix, dataObject.y, dataObject.x, dataObject.sentence, dataObject.domain);
             maxLength = 60;
             if (dataObject.sentence.length > maxLength) {
                 return dataObject.domain + ' ' + dataObject.sentence.substring(0,maxLength - 2) + '...';
@@ -144,7 +143,7 @@ $(document).ready(function() {
 
     var after_body_cb_for_per_word = function(prefix) {
         return function(tooltipItems, data) {
-            setTooltip(prefix, dataObject.y, dataObject.x, dataObject.domain, '');
+            //setTooltip(prefix, dataObject.y, dataObject.x, dataObject.domain, '');
             dataObject = data.datasets[0].data[tooltipItems[0].index];
             return dataObject.word;
         };
@@ -157,41 +156,122 @@ $(document).ready(function() {
         return string;
     };
 
-    var gradientStroke = document.getElementById('pos_test_all').getContext("2d").createLinearGradient(30, 0, 520, 0);
-    gradientStroke.addColorStop(0, "#ff0000");
-    gradientStroke.addColorStop(.5, "#ffffff")
-    gradientStroke.addColorStop(1, "#0008ff");
-
-
-    var pos_test_all_colors = [];
-    var pos_test_per_word_colors = [];
-    var pos_test_all;
-    var pos_test_per_word;
+    var per_sentence_sentiment_colors = [];
+    var per_word_sentiment_colors = [];
+    var per_sentence_sentiment;
+    var per_word_sentiment;
+    var sentiment_over_time;
 
     var init_charts = function() {
     //    ajax_request('js/mean_valence_and_arousals_pos.js').then(function(va_pos) {
-    //        pos_test_all = new Chart(pos_test_all,
-    //            generateChartOptions(pos_test_all, 'Positive Test -- All sentences', va_pos.v_and_a_pos, 'pos_test_all',
-    //                after_body_cb_for_all_sentences('pos_test_all'), label_cb_for_all_sentences, pos_test_all_colors));
+    //        per_sentence_sentiment = new Chart(per_sentence_sentiment,
+    //            generateChartOptions(per_sentence_sentiment, 'Positive Test -- All sentences', va_pos.v_and_a_pos, 'per_sentence_sentiment',
+    //                after_body_cb_for_all_sentences('per_sentence_sentiment'), label_cb_for_all_sentences, per_sentence_sentiment_colors));
     //    }).then(function() {
-    //        pos_test_per_word = new Chart(pos_test_per_word,
-    //            generateChartOptions(pos_test_per_word, 'Positive Test -- By Document', v_and_a_per_doc_pos, 'pos_test_per_word',
-    //                after_body_cb_for_per_doc('pos_test_per_word'), label_cb_for_per_doc, pos_test_per_word_colors));
+    //        per_word_sentiment = new Chart(per_word_sentiment,
+    //            generateChartOptions(per_word_sentiment, 'Positive Test -- By Document', v_and_a_per_doc_pos, 'per_word_sentiment',
+    //                after_body_cb_for_per_doc('per_word_sentiment'), label_cb_for_per_doc, per_word_sentiment_colors));
     //    });
     };
 
 
 
-   pos_test_all = new Chart(pos_test_all,
-        generateChartOptions(pos_test_all, 'Per Sentence', v_and_a_pos, 'pos_test_all',
-            after_body_cb_for_all_sentences('pos_test_all'), label_cb_for_all_sentences, pos_test_all_colors));
+   per_sentence_sentiment = new Chart(per_sentence_sentiment_ref,
+        generateChartOptions(per_sentence_sentiment, 'Sentence sentiment', v_and_a_pos, 'per_sentence_sentiment',
+            after_body_cb_for_all_sentences('per_sentence_sentiment'), label_cb_for_all_sentences, per_sentence_sentiment_colors));
 
-   pos_test_per_word = new Chart(pos_test_per_word,
-        generateChartOptions(pos_test_per_word, 'Per Word', v_and_a_pos_per_word, 'pos_test_per_word',
-            after_body_cb_for_per_word('pos_test_per_word'), label_cb_for_per_word, pos_test_per_word_colors));
+   per_word_sentiment = new Chart(per_word_sentiment_ref,
+        generateChartOptions(per_word_sentiment, 'Word sentiment', v_and_a_pos_per_word, 'per_word_sentiment',
+            after_body_cb_for_per_word('per_word_sentiment'), label_cb_for_per_word, per_word_sentiment_colors));
+
+   // Construct line graph from available data
+   var v_and_a_pos_over_time_labels = []
+   var v_and_a_pos_over_time_data = []
+   var max_length = Math.min(100, v_and_a_pos.length);
+   for (var i = 0; i < max_length; i++) {
+        var datum = v_and_a_pos[i];
+        v_and_a_pos_over_time_labels.push(i);
+        v_and_a_pos_over_time_data.push(datum.x);
+   }
+   var sentiment_over_time_colors = [];
+   sentiment_over_time = new Chart(sentiment_over_time_ref, {
+        type: 'line',
+        data: {
+            labels: v_and_a_pos_over_time_labels,
+            datasets: [{
+                label: "Sentiment of each sentence, by index",
+                data: v_and_a_pos_over_time_data,
+                borderColor:               sentiment_over_time_colors,
+                pointBorderColor:          '#000',
+                pointBackgroundColor:      sentiment_over_time_colors,
+                pointHoverBackgroundColor: sentiment_over_time_colors,
+                pointHoverBorderColor:     sentiment_over_time_colors,
+                fill: false
+            }]
+        },
+        options: {
+                maintainAspectRatio: false,
+                tooltips: {
+                    mode: 'nearest',
+                    bodySpacing: 8,
+                    callbacks: {
+                        title: function(tooltipItems, data) {
+                            return "Sentence " + tooltipItems[0].xLabel;
+                        },
+                        afterBody: function(tooltipItems, data) {
+                            dataObject = data.datasets[0].data[tooltipItems[0].index];
+                            return "";
+                        },
+                        label: function(tooltipItem, data) {
+                            valence = data.datasets[0].data[tooltipItem.index];
+                            var string = "Valence: " + (Math.round(valence*100)/100)
+                            return string;
+                        }
+                    }
+                },
+                annotations: [
+                    {
+                      drawTime: "afterDatasetsDraw",
+                      id: "hline",
+                      type: "line",
+                      mode: "horizontal",
+                      scaleID: "y-axis-0",
+                      value: 5,
+                      borderColor: "black",
+                      borderDash: [2,2],
+                      borderWidth: 2,
+                      label: {
+                          backgroundColor: "black",
+                          content: "valence",
+                          position: "right",
+                          enabled: true
+                      }
+                    }
+                ],
+                responsive: true,
+                scales: {
+                    yAxes: [{
+                        id: 'y-axis-0',
+                        display: true,
+                        ticks: {
+                            suggestedMin: 1,
+                            max: 9
+                        }
+                    }],
+                    xAxes: [{
+                        id: 'x-axis-0',
+                        display: true,
+                        ticks: {
+                            autoSkip: true,
+                            maxTicksLimit: 10
+                        }
+                    }]
+                }
+            }
+   });
 
 
-    var chart_colors = function(chart, colors) {
+    var scatterplot_chart_colors = function(chart, colors) {
         for (i = 0; i < chart.data.datasets[0].data.length; i++) {
             var c = "";
             var valence = chart.data.datasets[0].data[i].x;
@@ -209,10 +289,29 @@ $(document).ready(function() {
         chart.update()
     };
 
+    var line_chart_colors = function(chart, colors) {
+        for (i = 0; i < chart.data.datasets[0].data.length; i++) {
+            var c = "";
+            var valence = chart.data.datasets[0].data[i];
+            if (valence > 5) {
+                var b = 255;
+                var r_and_g = Math.floor(255 - (255 * ((valence - 5) / 4)));
+                c = "rgb("+r_and_g+","+r_and_g+"," + b + ")"
+            } else {
+                var r = 255;
+                var g_and_b = Math.floor(255 * ((valence - 1) / 4));
+                c = "rgb("+r+","+g_and_b+"," + g_and_b + ")"
+            }
+            colors.push(c);
+        }
+        chart.update()
+    }
+
     var refresh_charts = function() {
         // Set chart colors
-        chart_colors(pos_test_all, pos_test_all_colors);
-        chart_colors(pos_test_per_word, pos_test_per_word_colors);
+        scatterplot_chart_colors(per_sentence_sentiment, per_sentence_sentiment_colors);
+        scatterplot_chart_colors(per_word_sentiment, per_word_sentiment_colors);
+        line_chart_colors(sentiment_over_time, sentiment_over_time_colors);
     };
 
     init_charts();
