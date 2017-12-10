@@ -99,7 +99,7 @@ def run(dir):
     # time_liblinear_predict = t2 - t1
 
     # Perform classification with RandomForest
-    classifier_rdf = RandomForestClassifier(n_estimators = 100, n_jobs = -1, verbose = 1)
+    classifier_rdf = RandomForestClassifier(n_estimators=100, n_jobs=-1, verbose=1, max_depth=100)
     t0 = time.time()
     classifier_rdf.fit(train_vectors, train_labels)
     t1 = time.time()
@@ -131,6 +131,8 @@ def run(dir):
 #         pos       0.58      0.64      0.61        76
 #
 # avg / total       0.59      0.59      0.59       151
+# accuracy: 59%
+
 #
 # Results for RandomForest
 # Training time: 0.849757s; Prediction time: 0.106429s
@@ -140,60 +142,61 @@ def run(dir):
 #         pos       0.54      0.80      0.65        76
 #
 # avg / total       0.58      0.56      0.54       151
-
-# Sport:
+# accuracy: 58%
+# Sport
 # Results for SVC(kernel=linear)
-# Training time: 4.865517s; Prediction time: 0.220716s
+# Training time: 4.936845s; Prediction time: 0.119715s
 #              precision    recall  f1-score   support
 #
-#         neg       0.78      0.53      0.63        75
-#         pos       0.29      0.56      0.38        25
+#         neg       0.54      0.52      0.53        25
+#         pos       0.54      0.56      0.55        25
 #
-# avg / total       0.66      0.54      0.57       100
-#
+# avg / total       0.54      0.54      0.54        50
+# accuracy: 54%
 # Results for RandomForest
-# Training time: 0.736891s; Prediction time: 0.106315s
+# Training time: 0.633558s; Prediction time: 0.104082s
 #              precision    recall  f1-score   support
 #
-#         neg       0.75      0.36      0.49        75
-#         pos       0.25      0.64      0.36        25
+#         neg       0.60      0.48      0.53        25
+#         pos       0.57      0.68      0.62        25
 #
-# avg / total       0.62      0.43      0.45       100
-
+# avg / total       0.58      0.58      0.58        50
+# accuracy: 58%
 # Literrature:
 # Results for SVC(kernel=linear)
-# Training time: 4.982864s; Prediction time: 0.171225s
+# Training time: 4.790611s; Prediction time: 0.047640s
 #              precision    recall  f1-score   support
 #
-#         neg       0.77      0.53      0.63        75
-#         pos       0.29      0.54      0.37        26
+#         neg       0.57      0.64      0.60        25
+#         pos       0.61      0.54      0.57        26
 #
-# avg / total       0.64      0.53      0.56       101
-#
+# avg / total       0.59      0.59      0.59        51
+# accuracy: 59%
 # Results for RandomForest
-# Training time: 0.801408s; Prediction time: 0.105362s
+# Training time: 0.635613s; Prediction time: 0.105084s
 #              precision    recall  f1-score   support
 #
-#         neg       0.78      0.24      0.37        75
-#         pos       0.27      0.81      0.40        26
+#         neg       0.64      0.36      0.46        25
+#         pos       0.57      0.81      0.67        26
 #
-# avg / total       0.65      0.39      0.38       101
-
+# avg / total       0.60      0.59      0.57        51
+# accuracy: 60%
 # Politics:
 # Results for SVC(kernel=linear)
-# Training time: 5.652754s; Prediction time: 0.211159s
+# Training time: 4.845615s; Prediction time: 0.121388s
 #              precision    recall  f1-score   support
 #
-#         neg       0.91      0.53      0.67        75
-#         pos       0.38      0.84      0.52        25
+#         neg       0.73      0.44      0.55        25
+#         pos       0.60      0.84      0.70        25
 #
-# avg / total       0.78      0.61      0.63       100
-#
+# avg / total       0.67      0.64      0.62        50
+# accuracy: 67%
 # Results for RandomForest
-# Training time: 0.782652s; Prediction time: 0.113840s
+# Training time: 0.619632s; Prediction time: 0.106277s
 #              precision    recall  f1-score   support
 #
-#         neg       0.90      0.25      0.40        75
-#         pos       0.29      0.92      0.44        25
+#         neg       0.60      0.24      0.34        25
+#         pos       0.53      0.84      0.65        25
 #
-# avg / total       0.75      0.42      0.41       100
+# avg / total       0.56      0.54      0.49        50
+# accuracy: 56%

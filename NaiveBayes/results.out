@@ -20,3 +20,19 @@ Positive Reviews:
    Precision: 0.5714285714285714
    Recall: 0.5714285714285714
    F1: 0.5714285714285714
+
+All POS --> [num guessed pos, num guessed neg]
+36 40
+
+All NEG --> [num guessed pos, num guessed neg]
+33 42
+
+Positive Reviews:
+   Precision: 0.5217391304347826
+   Recall: 0.47368421052631576
+   F1: 0.49655172413793097
+
+Negative Reviews:
+   Precision: 0.5121951219512195
+   Recall: 0.56
+   F1: 0.535031847133758
