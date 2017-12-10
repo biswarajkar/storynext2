@@ -16,7 +16,7 @@ $(document).ready(function() {
         currentSentenceTooltip.text(domain + ' ' + sentence);
     };
 
-    var generateChartOptions = function(ctx, graph_label, data, prefix, afterBody_cb, label_cb) {
+    var generateChartOptions = function(ctx, graph_label, data, prefix, afterBody_cb, label_cb, colors) {
 
 
         return {
@@ -25,11 +25,11 @@ $(document).ready(function() {
                 datasets: [{
                     label: graph_label,
                     data: data,
-                    borderColor:               gradientStroke,
+                    borderColor:               colors,
                     pointBorderColor:          '#999999',
-                    pointBackgroundColor:      gradientStroke,
-                    pointHoverBackgroundColor: gradientStroke,
-                    pointHoverBorderColor:     gradientStroke
+                    pointBackgroundColor:      colors,
+                    pointHoverBackgroundColor: colors,
+                    pointHoverBorderColor:     colors
                 }]
             },
             lineAtIndex: [5],
@@ -137,8 +137,8 @@ $(document).ready(function() {
 
     var label_cb_for_all_sentences = function(tooltipItem, data) {
         dataObject = data.datasets[0].data[tooltipItem.index];
-        var string = "Arousal: " + dataObject.y +
-        ", Valence: " + dataObject.x
+        var string = "Arousal: " + (Math.round(dataObject.y*100)/100) +
+        ", Valence: " + (Math.round(dataObject.x*100)/100)
         return string
     };
 
@@ -152,8 +152,8 @@ $(document).ready(function() {
 
     var label_cb_for_per_doc = function(tooltipItem, data) {
         dataObject = data.datasets[0].data[tooltipItem.index];
-        var string = "Arousal: " + dataObject.y +
-        ", Valence: " + dataObject.x
+        var string = "Arousal: " + (Math.round(dataObject.y*100)/100) +
+        ", Valence: " + (Math.round(dataObject.x*100)/100)
         return string
     };
 
@@ -163,20 +163,59 @@ $(document).ready(function() {
     gradientStroke.addColorStop(1, "#0008ff");
 
 
-    var pos_test_all = new Chart(pos_test_all,
+    var pos_test_all_colors = [];
+    var pos_test_doc_colors = [];
+    var pos_test_all;
+    var pos_test_doc;
+
+    var init_charts = function() {
+    //    ajax_request('js/mean_valence_and_arousals_pos.js').then(function(va_pos) {
+    //        pos_test_all = new Chart(pos_test_all,
+    //            generateChartOptions(pos_test_all, 'Positive Test -- All sentences', va_pos.v_and_a_pos, 'pos_test_all',
+    //                after_body_cb_for_all_sentences('pos_test_all'), label_cb_for_all_sentences, pos_test_all_colors));
+    //    }).then(function() {
+    //        pos_test_doc = new Chart(pos_test_doc,
+    //            generateChartOptions(pos_test_doc, 'Positive Test -- By Document', v_and_a_per_doc_pos, 'pos_test_doc',
+    //                after_body_cb_for_per_doc('pos_test_doc'), label_cb_for_per_doc, pos_test_doc_colors));
+    //    });
+    };
+
+
+
+   pos_test_all = new Chart(pos_test_all,
         generateChartOptions(pos_test_all, 'Positive Test -- All sentences', v_and_a_pos, 'pos_test_all',
-            after_body_cb_for_all_sentences('pos_test_all'), label_cb_for_all_sentences));
+            after_body_cb_for_all_sentences('pos_test_all'), label_cb_for_all_sentences, pos_test_all_colors));
 
-    var pos_test_doc = new Chart(pos_test_doc,
+   pos_test_doc = new Chart(pos_test_doc,
         generateChartOptions(pos_test_doc, 'Positive Test -- By Document', v_and_a_per_doc_pos, 'pos_test_doc',
-            after_body_cb_for_per_doc('pos_test_doc'), label_cb_for_per_doc));
+            after_body_cb_for_per_doc('pos_test_doc'), label_cb_for_per_doc, pos_test_doc_colors));
 
-    var pos_test_all = new Chart(neg_test_all,
-        generateChartOptions(neg_test_all, 'Negative Test -- All sentences', v_and_a_neg, 'neg_test_all',
-            after_body_cb_for_all_sentences('neg_test_all'), label_cb_for_all_sentences));
 
-    var pos_test_doc = new Chart(neg_test_doc,
-        generateChartOptions(neg_test_doc, 'Negative Test -- By Document', v_and_a_per_doc_neg, 'neg_test_doc',
-            after_body_cb_for_per_doc('neg_test_doc'), label_cb_for_per_doc));
+    var chart_colors = function(chart, colors) {
+        for (i = 0; i < chart.data.datasets[0].data.length; i++) {
+            var c = "";
+            var valence = chart.data.datasets[0].data[i].x;
+            if (valence > 5) {
+                var b = 255;
+                var r_and_g = Math.floor(255 - (255 * ((valence - 5) / 4)));
+                c = "rgb("+r_and_g+","+r_and_g+"," + b + ")"
+            } else {
+                var r = 255;
+                var g_and_b = Math.floor(255 * ((valence - 1) / 4));
+                c = "rgb("+r+","+g_and_b+"," + g_and_b + ")"
+            }
+            colors.push(c);
+        }
+        chart.update()
+    };
+
+    var refresh_charts = function() {
+        // Set chart colors
+        chart_colors(pos_test_all, pos_test_all_colors);
+        chart_colors(pos_test_doc, pos_test_doc_colors);
+    };
+
+    init_charts();
+    refresh_charts();
 
 });
