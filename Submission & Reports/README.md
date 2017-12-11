@@ -15,6 +15,7 @@ Tensorflow (v1.3): https://www.tensorflow.org/install/
 Virtual Environment: https://virtualenv.pypa.io/en/stable/
 Scikit: http://scikit-learn.org/stable/install.html
 matplotlib: https://matplotlib.org/users/installing.html
+NLTK: http://www.nltk.org/install.html
 
 
 The project has the following modules:

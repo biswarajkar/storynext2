@@ -1,9 +1,12 @@
 import glob
 import json
 import numpy
-#import matlab
+import sys
 
-from ValenceArousal.sentiment_classifier import SentimentClassifier
+fprint = open("results.out", 'w')
+sys.stdout = fprint
+
+from sentiment_classifier import SentimentClassifier
 from nltk.tokenize import sent_tokenize
 
 def get_domain(filename):
@@ -118,9 +121,6 @@ def report_test(pos_folder, neg_folder):
     print('POS TEST: ' + str(pos_test[0] + pos_test[1]) + ' documents')
     print('POS: ' + str(pos_test[0]) + ', NEG: ' + str(pos_test[1]))
 
-    print('NEG TEST:' + str(neg_test[0] + neg_test[1]) + ' documents')
-    print('POS: ' + str(neg_test[0]) + ', NEG: ' + str(neg_test[1]))
-
     pos_pos = pos_test[0]
     pos_neg = pos_test[1]
     neg_neg = neg_test[1]
@@ -128,7 +128,7 @@ def report_test(pos_folder, neg_folder):
 
     accuracy = (pos_pos + neg_neg) / (pos_pos + pos_neg + neg_neg + neg_pos)
 
-    print('Precision, Recall, and F1 for POSITIVE test_gitignore:')
+    print('Precision, Recall, and F1 for Positive Sentiments:')
     precision = pos_pos / (pos_pos + neg_pos)
     recall = pos_pos / (pos_pos + pos_neg)
     f1 = (2 * precision * recall) / (precision + recall)
@@ -138,7 +138,10 @@ def report_test(pos_folder, neg_folder):
 
     print()
 
-    print('Precision, Recall and F1 for NEGATIVE test_gitignore:')
+    print('NEG TEST:' + str(neg_test[0] + neg_test[1]) + ' documents')
+    print('POS: ' + str(neg_test[0]) + ', NEG: ' + str(neg_test[1]))
+
+    print('Precision, Recall and F1 for Negative Sentiments:')
     precision = neg_neg / (neg_neg + pos_neg)
     recall = neg_neg / (neg_neg + neg_pos)
     f1 = (2 * precision * recall) / (precision + recall)
@@ -150,7 +153,6 @@ def report_test(pos_folder, neg_folder):
 
     print('Total Accuracy: ' + str(accuracy))
 
+report_test('../testing_corpus_hand_tagged/positive/*.txt', '../testing_corpus_hand_tagged/negative/*.txt')
 
-
-
-report_test('../hand_tagged/positive/*.txt', '../hand_tagged/negative/*.txt')
+fprint.close()

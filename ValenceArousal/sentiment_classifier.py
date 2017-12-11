@@ -2,8 +2,8 @@ import csv
 import numpy
 
 from nltk.tokenize import word_tokenize
-from ValenceArousal.formulas import weighted_mean
-from ValenceArousal.formulas import reverse_valence
+from formulas import weighted_mean
+from formulas import reverse_valence
 from nltk.tokenize import sent_tokenize
 
 class SentimentClassifier:
