@@ -7,7 +7,7 @@ maxSeqLength = 250
 batchSize = 24
 lstmUnits = 64
 numClasses = 2
-iterations = 100000
+iterations = 70000
 
 
 wordsList = np.load('wordsList.npy').tolist()
