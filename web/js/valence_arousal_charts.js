@@ -174,6 +174,38 @@ $(document).ready(function() {
     //    });
     };
 
+    var update_charts = function(text) {
+        //var addData = function(chart, labels, data) {
+        //    labels.forEach(label => chart.data.labels.push(label));
+        //    chart.data.datasets.forEach((dataset) => {
+        //        dataset.data.push(data);
+        //    });
+        //    chart.update();
+        //};
+//
+        //var removeAllData = function(chart) {
+        //    chart.data.labels = [];
+        //    chart.data.datasets.forEach((dataset) => {
+        //        dataset.data = [];
+        //    });
+        //    chart.update();
+        //};
+        //var data, label;
+
+        /// To update charts, you have a list of data and a list of labels. Those are then paired up and added to the chart
+        //ajax_request('js/mean_valence_and_arousals_pos.js').then(function(va_pos) {
+        //    removeData(per_sentence_sentiment);
+        //    addData(per_sentence_sentiment, )
+        //    per_sentence_sentiment = new Chart(per_sentence_sentiment,
+        //        generateChartOptions(per_sentence_sentiment, 'Positive Test -- All sentences', va_pos.v_and_a_pos, 'per_sentence_sentiment',
+        //            after_body_cb_for_all_sentences('per_sentence_sentiment'), label_cb_for_all_sentences, per_sentence_sentiment_colors));
+        //}).then(function() {
+        //    per_word_sentiment = new Chart(per_word_sentiment,
+        //        generateChartOptions(per_word_sentiment, 'Positive Test -- By Document', v_and_a_per_doc_pos, 'per_word_sentiment',
+        //            after_body_cb_for_per_doc('per_word_sentiment'), label_cb_for_per_doc, per_word_sentiment_colors));
+        //});
+    };
+
 
 
    per_sentence_sentiment = new Chart(per_sentence_sentiment_ref,
