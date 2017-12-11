@@ -10,6 +10,7 @@ Test Size: 151 Hand tagged Texts (76 Positive + 75 Negative)
 Model Params: 70000 iterations, 64 LSTM units, Gradient Descent Optimizer with Learning rate of 0.1
 
 Please run the file "tf_lstm_train_test_eval.py" to classify using a RNN model with LSTMs.
+The classification results can be seen in the "/logs" folder corresponding to the run, as well as on the console after he run is completed.
 
 Notes about commented Code:
 ---------------------------
