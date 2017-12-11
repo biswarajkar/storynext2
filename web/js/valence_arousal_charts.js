@@ -4,16 +4,24 @@ $(document).ready(function() {
     var per_word_sentiment_ref = $('#per_word_sentiment');
     var sentiment_over_time_ref = $('#sentiment-over-time-chart');
 
+    $(".go").on("click", function () {
+        press_go();
+    });
 
-    var setTooltip = function(prefix, valence, arousal, sentence, domain) {
-        var currentValenceTooltip = $('#' + prefix + '_valence_tooltip');
-        var currentArousalTooltip = $('#' + prefix + '_arousal_tooltip');
-        var currentSentenceTooltip = $('#' + prefix + '_sentence_tooltip');
-
-        currentValenceTooltip.text(valence);
-        currentArousalTooltip.text(arousal);
-        currentSentenceTooltip.text(domain + ' ' + sentence);
+    var press_go = function () {
+        $.ajax({
+            url: "cgi-bin/testAjax.cgi",
+            type: "POST",
+            data: {content: $("#text-input").val(), bar: 'bar'},
+            success: function (response) {
+                //$("#testAjax").html(response);
+                // alert(response);
+                update_charts(response);
+                //console.log(results);
+            }
+        });
     };
+
 
     var generateChartOptions = function(ctx, graph_label, data, prefix, afterBody_cb, label_cb, colors) {
 
@@ -127,9 +135,9 @@ $(document).ready(function() {
             //setTooltip(prefix, dataObject.y, dataObject.x, dataObject.sentence, dataObject.domain);
             maxLength = 60;
             if (dataObject.sentence.length > maxLength) {
-                return dataObject.domain + ' ' + dataObject.sentence.substring(0,maxLength - 2) + '...';
+                return dataObject.sentence.substring(0,maxLength - 2) + '...';
             } else {
-                return dataObject.domain + ' ' + dataObject.sentence;
+                return dataObject.sentence;
             }
         };
     };
@@ -163,44 +171,91 @@ $(document).ready(function() {
     var sentiment_over_time;
 
     var init_charts = function() {
-    //    ajax_request('js/mean_valence_and_arousals_pos.js').then(function(va_pos) {
-    //        per_sentence_sentiment = new Chart(per_sentence_sentiment,
-    //            generateChartOptions(per_sentence_sentiment, 'Positive Test -- All sentences', va_pos.v_and_a_pos, 'per_sentence_sentiment',
-    //                after_body_cb_for_all_sentences('per_sentence_sentiment'), label_cb_for_all_sentences, per_sentence_sentiment_colors));
-    //    }).then(function() {
-    //        per_word_sentiment = new Chart(per_word_sentiment,
-    //            generateChartOptions(per_word_sentiment, 'Positive Test -- By Document', v_and_a_per_doc_pos, 'per_word_sentiment',
-    //                after_body_cb_for_per_doc('per_word_sentiment'), label_cb_for_per_doc, per_word_sentiment_colors));
-    //    });
+        press_go();
+    };
+
+    // data = {'sentiment_per_word' : ...,
+    //          'sentiment_per_sentence': ...,
+    //          'sentiment_over_time': ...}
+    var update_charts = function(python_response) {
+        var addData = function(chart, labels, data) {
+           labels.forEach(label => chart.data.labels.push(label));
+           chart.data.datasets.forEach((dataset) => {
+               data.forEach(d => dataset.data.push(d));
+           });
+           chart.update();
+        };
+
+        var addScatterplotData_Sentence = function (chart, labels, data, texts) {
+            chart.data.datasets.forEach((dataset) => {
+                for (var i = 0; i < data.length; i++) {
+                    var d = {
+                        'x': labels[i],
+                        'y': data[i],
+                        'sentence': texts[i]
+                    };
+                    dataset.data.push(d);
+                }
+            });
+        };
+
+        var addScatterplotData_Word = function (chart, labels, data, texts) {
+            chart.data.datasets.forEach((dataset) => {
+                for (var i = 0; i < data.length; i++) {
+                    var d = {
+                        'x': labels[i],
+                        'y': data[i],
+                        'word': texts[i]
+                    };
+                    dataset.data.push(d);
+                }
+            });
+        };
+
+        var removeAllData = function(chart) {
+           chart.data.labels = [];
+           chart.data.datasets.forEach((dataset) => {
+               dataset.data = [];
+           });
+           chart.update();
+        };
+
+        removeAllData(sentiment_over_time);
+        removeAllData(per_sentence_sentiment);
+        removeAllData(per_word_sentiment);
+
+        addData(sentiment_over_time, python_response.sentiment_over_time.labels, python_response.sentiment_over_time.data);
+        addScatterplotData_Sentence(per_sentence_sentiment, python_response.sentiment_per_sentence.labels,
+            python_response.sentiment_per_sentence.data,
+            python_response.sentiment_per_sentence.texts
+        );
+        addScatterplotData_Word(per_word_sentiment, python_response.sentiment_per_word.labels,
+            python_response.sentiment_per_word.data,
+            python_response.sentiment_per_word.texts
+        );
+
+        refresh_charts();
     };
 
 
 
    per_sentence_sentiment = new Chart(per_sentence_sentiment_ref,
-        generateChartOptions(per_sentence_sentiment, 'Sentence sentiment', v_and_a_pos, 'per_sentence_sentiment',
+        generateChartOptions(per_sentence_sentiment, 'Sentence sentiment', [], 'per_sentence_sentiment',
             after_body_cb_for_all_sentences('per_sentence_sentiment'), label_cb_for_all_sentences, per_sentence_sentiment_colors));
 
    per_word_sentiment = new Chart(per_word_sentiment_ref,
-        generateChartOptions(per_word_sentiment, 'Word sentiment', v_and_a_pos_per_word, 'per_word_sentiment',
+        generateChartOptions(per_word_sentiment, 'Word sentiment', [], 'per_word_sentiment',
             after_body_cb_for_per_word('per_word_sentiment'), label_cb_for_per_word, per_word_sentiment_colors));
 
    // Construct line graph from available data
-   var v_and_a_pos_over_time_labels = []
-   var v_and_a_pos_over_time_data = []
-   var max_length = Math.min(100, v_and_a_pos.length);
-   for (var i = 0; i < max_length; i++) {
-        var datum = v_and_a_pos[i];
-        v_and_a_pos_over_time_labels.push(i);
-        v_and_a_pos_over_time_data.push(datum.x);
-   }
    var sentiment_over_time_colors = [];
    sentiment_over_time = new Chart(sentiment_over_time_ref, {
         type: 'line',
         data: {
-            labels: v_and_a_pos_over_time_labels,
+            labels: [],
             datasets: [{
                 label: "Sentiment of each sentence, by index",
-                data: v_and_a_pos_over_time_data,
+                data: [],
                 borderColor:               sentiment_over_time_colors,
                 pointBorderColor:          '#000',
                 pointBackgroundColor:      sentiment_over_time_colors,
@@ -305,16 +360,17 @@ $(document).ready(function() {
             colors.push(c);
         }
         chart.update()
-    }
+    };
 
     var refresh_charts = function() {
         // Set chart colors
+        per_sentence_sentiment_colors.length = 0;
+        per_word_sentiment_colors.length = 0;
+        sentiment_over_time_colors.length = 0;
         scatterplot_chart_colors(per_sentence_sentiment, per_sentence_sentiment_colors);
         scatterplot_chart_colors(per_word_sentiment, per_word_sentiment_colors);
         line_chart_colors(sentiment_over_time, sentiment_over_time_colors);
     };
 
     init_charts();
-    refresh_charts();
-
 });

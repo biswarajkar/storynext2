@@ -1,18 +1,38 @@
 
-Positive Classifier --> [TP, FN]
+Gutenberg POS --> [num guessed pos, num guessed neg]
+11 1
+
+Gutenberg NEG --> [num guessed pos, num guessed neg]
+6 6
+
+Positive Reviews:
+   Precision: 0.6470588235294118
+   Recall: 0.9166666666666666
+   F1: 0.7586206896551724
+
+News POS --> [TP, FN]
+4 3
+
+News NEG --> [FP, TN]
+3 2
+
+Positive Reviews:
+   Precision: 0.5714285714285714
+   Recall: 0.5714285714285714
+   F1: 0.5714285714285714
+
+All POS --> [num guessed pos, num guessed neg]
 36 40
 
-Negative Classification --> [FP, TN]
+All NEG --> [num guessed pos, num guessed neg]
 33 42
 
 Positive Reviews:
    Precision: 0.5217391304347826
    Recall: 0.47368421052631576
    F1: 0.49655172413793097
-   Accuracy: 0.5217391304347826
 
 Negative Reviews:
    Precision: 0.5121951219512195
    Recall: 0.56
    F1: 0.535031847133758
-   Accuracy: 0.5121951219512195
