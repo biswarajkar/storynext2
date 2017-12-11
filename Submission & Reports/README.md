@@ -1,4 +1,5 @@
 ## Team 6 - StoryNext 2.0    
+**Biswaraj Kar | Andrew Krischer | Ling Zhang**  
 The project is coded with Python version 3.6.3 using PyCharm CE as the IDE
 
 The first step to run the project is to **create a [virtual environment](https://virtualenv.pypa.io/en/stable/) in Python and install all dependent libraries.**   
