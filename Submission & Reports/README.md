@@ -11,7 +11,7 @@ One way to do it is start with Tensorflow setup:
 - Run **virtualenv --system-site-packages -p python3 ~/tensorflow**    
 - Run **source ~/tensorflow/bin/activate**    
 - Prompt changes to **(tensorflow)$**   
-- Then use the _**requirements.txt**_ to install all required libraries into this virtual env.    
+- Then use the _**requirements.txt**_ to install all required libraries into this virtual env. by running the command **pip3 install -r requirements.txt**
 
 Additional Help for specific Libraries:    
 - Tensorflow (v1.3): https://www.tensorflow.org/install/    
