@@ -42,9 +42,7 @@ def run(dir):
     for cur_folder in folders:
         for curr_class in classes:
             dirname = os.path.join(data_dir, cur_folder, curr_class)
-            print("dirname:", dirname)
             for fname in os.listdir(dirname):
-                print(fname)
                 with open(os.path.join(dirname, fname), 'r', encoding='utf-8', errors='ignore') as f:
                     content = f.read()
                     if cur_folder == 'test':
@@ -54,8 +52,6 @@ def run(dir):
                         train_data.append(content)
                         train_labels.append(curr_class)
 
-    print(len(test_data))
-    print(len(train_data))
     # Create feature vectors
     # min_df = 5, discard words appearing in less than 5 documents
     # max_df = 0.8, discard words appering in more than 80 % of the documents
