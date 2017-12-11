@@ -3,24 +3,15 @@
 #
 # Dataset: Polarity dataset v2.0
 # http://www.cs.cornell.edu/people/pabo/movie-review-data/
-#
 # Full discussion:
 # https://marcobonzanini.wordpress.com/2015/01/19/sentiment-analysis-with-python-and-scikit-learn
 
 
-import sys
-import os
 import time
-
-from sklearn.feature_extraction.text import TfidfVectorizer
+import os
 from sklearn import svm
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import classification_report
-
-
-#
-# def usage():
-#     print("Usage:")
-#     print("python %s ./Dataset" % sys.argv[0])
 
 
 def run(dir):
@@ -40,9 +31,7 @@ def run(dir):
     for cur_folder in folders:
         for curr_class in classes:
             dirname = os.path.join(data_dir, cur_folder, curr_class)
-            print("dirname:", dirname)
             for fname in os.listdir(dirname):
-                print(fname)
                 with open(os.path.join(dirname, fname), 'r', encoding='utf-8', errors='ignore') as f:
                     content = f.read()
                     if cur_folder == 'test':
@@ -52,8 +41,6 @@ def run(dir):
                         train_data.append(content)
                         train_labels.append(curr_class)
 
-    print(len(test_data))
-    print(len(train_data))
     # Create feature vectors
     # min_df = 5, discard words appearing in less than 5 documents
     # max_df = 0.8, discard words appering in more than 80 % of the documents
@@ -107,29 +94,29 @@ def run(dir):
     print("Training time: %fs; Prediction time: %fs" % (time_liblinear_train, time_liblinear_predict))
     print(classification_report(test_labels, prediction_liblinear))
 
-# Results for SVC(kernel=rbf)
-# Training time: 5.164954s; Prediction time: 0.360977s
-#              precision    recall  f1-score   support
-#
-#         neg       0.53      0.25      0.34        75
-#         pos       0.51      0.78      0.62        76
-#
-# avg / total       0.52      0.52      0.48       151
-#
-# Results for SVC(kernel=linear)
-# Training time: 5.006144s; Prediction time: 0.296542s
-#              precision    recall  f1-score   support
-#
-#         neg       0.60      0.53      0.56        75
-#         pos       0.58      0.64      0.61        76
-#
-# avg / total       0.59      0.59      0.59       151
-#
-# Results for LinearSVC()
-# Training time: 0.054336s; Prediction time: 0.000749s
-#              precision    recall  f1-score   support
-#
-#         neg       0.59      0.49      0.54        75
-#         pos       0.57      0.66      0.61        76
-#
-# avg / total       0.58      0.58      0.57       151
+    # Results for SVC(kernel=rbf)
+    # Training time: 5.164954s; Prediction time: 0.360977s
+    #              precision    recall  f1-score   support
+    #
+    #         neg       0.53      0.25      0.34        75
+    #         pos       0.51      0.78      0.62        76
+    #
+    # avg / total       0.52      0.52      0.48       151
+    #
+    # Results for SVC(kernel=linear)
+    # Training time: 5.006144s; Prediction time: 0.296542s
+    #              precision    recall  f1-score   support
+    #
+    #         neg       0.60      0.53      0.56        75
+    #         pos       0.58      0.64      0.61        76
+    #
+    # avg / total       0.59      0.59      0.59       151
+    #
+    # Results for LinearSVC()
+    # Training time: 0.054336s; Prediction time: 0.000749s
+    #              precision    recall  f1-score   support
+    #
+    #         neg       0.59      0.49      0.54        75
+    #         pos       0.57      0.66      0.61        76
+    #
+    # avg / total       0.58      0.58      0.57       151

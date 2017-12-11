@@ -35,10 +35,10 @@ def vectorizeTest():
     from os.path import isfile, join
 
     # Create a list of Positive and Negative File names
-    positiveTestFiles = ['test/positive/' + f
-                         for f in listdir('test/positive/') if isfile(join('test/positive/', f))]
-    negativeTestFiles = ['test/negative/' + f
-                         for f in listdir('test/negative/') if isfile(join('test/negative/', f))]
+    positiveTestFiles = ['../testing_corpus_hand_tagged/positive/' + f
+                         for f in listdir('../testing_corpus_hand_tagged/positive/') if isfile(join('../testing_corpus_hand_tagged/positive/', f))]
+    negativeTestFiles = ['../testing_corpus_hand_tagged/negative/' + f
+                         for f in listdir('../testing_corpus_hand_tagged/negative/') if isfile(join('../testing_corpus_hand_tagged/negative/', f))]
 
     # ------------------------------
     # Get Test Corpus Statistics
@@ -73,6 +73,8 @@ def vectorizeTest():
 
     # Most articles have less than 300 words, put an upper bound
     maxArticleWordLength = 300
+
+    # Lines 80-135 : Can be commented to skip test Word Vector generation
 
     # ------------------------------
     #  Vectorize Test Corpus
@@ -133,5 +135,3 @@ def vectorizeTest():
     np.save('processing/trueTestLabels', true_test_labels)
 
     print(time.strftime("%M:%S", time.gmtime(time.time() - start_time)), "-- Vectorized Hand-tagged Test Saved --", " (", dt.now().strftime('%Y-%m-%d %H:%M:%S'), ")")
-
-vectorizeTest()

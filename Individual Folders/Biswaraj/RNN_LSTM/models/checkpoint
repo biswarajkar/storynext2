@@ -1,6 +1,0 @@
-model_checkpoint_path: "trained_lstm.ckpt-62000"
-all_model_checkpoint_paths: "trained_lstm.ckpt-58000"
-all_model_checkpoint_paths: "trained_lstm.ckpt-59000"
-all_model_checkpoint_paths: "trained_lstm.ckpt-60000"
-all_model_checkpoint_paths: "trained_lstm.ckpt-61000"
-all_model_checkpoint_paths: "trained_lstm.ckpt-62000"

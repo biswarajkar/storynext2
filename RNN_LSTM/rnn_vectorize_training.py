@@ -15,6 +15,8 @@ def cleanSentences(string):
 start_time = time.time()
 print("\n", str(datetime.now()), " - Vectorizing all 25K Training Reviews Started - ")
 
+# Lines 20-68 :Commented to use existing Word Vectors, Uncomment to create the Word Vectors from Training
+
 # # ------------------------------
 # #  Vectorize Training Corpus
 # # ------------------------------

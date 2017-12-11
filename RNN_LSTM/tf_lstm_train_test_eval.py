@@ -63,35 +63,65 @@ accuracy = tf.reduce_mean(tf.cast(correctPred, tf.float32))
 loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction, labels=labels))
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=learn_rate).minimize(loss)
 
-
 print(time.strftime("%M:%S", time.gmtime(time.time() - start_time)), " Started Training the model")
 print("### Batch Size:", batchSize, "| LSTM Units:", lstmUnits, "| Iterations:", iterations,
       "| Dimensions:", numDimensions, "| MaxWords:", maxReviewWordLength, "| Optimizer:", opt_lbl, learn_rate, "###")
 
-# ------------------------------
-# Train TF Model
-# ------------------------------
-sess = tf.InteractiveSession()
-sess.run(tf.global_variables_initializer())
-saver = tf.train.Saver()
-loss_array = np.zeros(iterations, dtype='int32')
 
-for i in range(iterations):
-    # Next Batch of reviews
-    nextBatch, nextBatchLabels = getTrainBatch(batchSize, maxReviewWordLength)
-    _, loss_val = sess.run([optimizer, loss], {input_data: nextBatch, labels: nextBatchLabels})
-    loss_array[i] = loss_val*100
+# Lines 73-123 :Commented to use existing Trained model, Uncomment to train the model fresh
+# WARNING: Training takes 7-8 hours for about 80000 iterations
 
-    # Save the network every 'polling_interval' number of training iterations
-    if (i % polling_interval == 0 and i != 0):
-        save_path = saver.save(sess, "models/trained_lstm.ckpt", global_step=i)
-        print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), "Saved to %s" % save_path, "| Loss: ", loss_val)
-
-# Save the Loss Values
-np.save('processing/loss_array_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
-        + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__(), loss_array)
-
-print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Completed Training the model")
+# # ------------------------------
+# # Train TF Model
+# # ------------------------------
+# sess = tf.InteractiveSession()
+# sess.run(tf.global_variables_initializer())
+# saver = tf.train.Saver()
+# loss_array = np.zeros(iterations, dtype='int32')
+#
+# tf.summary.scalar('Loss', loss)
+# tf.summary.scalar('Accuracy', accuracy)
+# merged = tf.summary.merge_all()
+# logdir = "tensorboard/"
+# writer = tf.summary.FileWriter(logdir, sess.graph)
+#
+# for i in range(iterations):
+#     # Next Batch of reviews
+#     nextBatch, nextBatchLabels = getTrainBatch(batchSize, maxReviewWordLength)
+#     _, loss_val = sess.run([optimizer, loss], {input_data: nextBatch, labels: nextBatchLabels})
+#     loss_array[i] = loss_val*100
+#
+#     # Write summary to Tensorboard
+#     if (i % (polling_interval/10) == 0 and i != 0):
+#         summary = sess.run(merged, {input_data: nextBatch, labels: nextBatchLabels})
+#         writer.add_summary(summary, i)
+#
+#     # Save the network every 'polling_interval' number of training iterations
+#     if (i % polling_interval == 0 and i != 0):
+#
+#         # Save state
+#         save_path = saver.save(sess, "models/trained_lstm.ckpt", global_step=i)
+#         print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), "Saved to %s" % save_path, "| Loss: ", loss_val)
+#
+# # Save the Loss Values
+# np.save('processing/loss_array_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
+#         + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__(), loss_array)
+#
+# # Plot the Loss Function
+# loss_array = np.load('processing/loss_array_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
+#         + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__()+'.npy')
+# import matplotlib.pyplot as plt_loss
+# plt_loss.plot(arange(0.0, iterations, 1), loss_array.tolist())
+# plt_loss.xlabel('Number of Iterations')
+# plt_loss.ylabel('Loss')
+# plt_loss.title('Loss Variations: LSTMs ' + lstmUnits.__str__() + ' | MaxWords ' + maxReviewWordLength.__str__()
+#                + ' | Optimizer ' + opt_lbl + learn_rate.__str__())
+# plt_loss.grid(True)
+# plt_loss.savefig('plots/Loss_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
+#                  + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__() + '.png', bbox_inches='tight', dpi=500)
+# plt_loss.close()
+#
+# print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Completed Training the model")
 
 # ------------------------------
 # Run TF Model on Test
@@ -100,8 +130,6 @@ print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), " Comple
 # 2 Sessions: current session and saved model session
 saver = tf.train.Saver()
 sess = tf.InteractiveSession()
-# saver = tf.train.import_meta_graph('models/pretrained_lstm.ckpt-90000.meta')
-# saver.restore(sess, 'models/pretrained_lstm.ckpt-90000')
 saver.restore(sess, tf.train.latest_checkpoint('models'))
 
 
@@ -125,20 +153,6 @@ for i in range(no_of_batches):
     handtag_accuracy_array.append(h_acc)
     print("Accuracy for this Custom Test batch:", h_acc * 100)
 
-# Plot the Loss Function
-loss_array = np.load('processing/loss_array_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
-        + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__()+'.npy')
-import matplotlib.pyplot as plt_loss
-plt_loss.plot(arange(0.0, iterations, 1), loss_array.tolist())
-plt_loss.xlabel('Number of Iterations')
-plt_loss.ylabel('Loss')
-plt_loss.title('Loss Variations: LSTMs ' + lstmUnits.__str__() + ' | MaxWords ' + maxReviewWordLength.__str__()
-               + ' | Optimizer ' + opt_lbl + learn_rate.__str__())
-plt_loss.grid(True)
-plt_loss.savefig('plots/Loss_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
-                 + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__() + '.png', bbox_inches='tight', dpi=500)
-plt_loss.show()
-plt_loss.close()
 
 # Plot the Accuracy Function
 import matplotlib.pyplot as plt_accu
@@ -151,7 +165,6 @@ plt_accu.title('Accuracy Variations: LSTMs ' + lstmUnits.__str__() + ' | Iterati
 plt_accu.grid(True)
 plt_accu.savefig('plots/Accuracy_NLS' + lstmUnits.__str__() + 'ITR' + iterations.__str__()
                  + 'MAXW' + maxReviewWordLength.__str__() + 'OPT' + opt_lbl + learn_rate.__str__() + '.png', bbox_inches='tight', dpi=300)
-plt_accu.show()
 plt_accu.close()
 
 print(time.strftime("%H:%M:%S", time.gmtime(time.time() - start_time)), "-- Evaluation Completed --",

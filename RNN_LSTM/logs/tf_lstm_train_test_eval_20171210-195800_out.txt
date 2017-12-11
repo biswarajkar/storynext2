@@ -1,0 +1,122 @@
+
+ 2017-12-10 19:58:00.155816  - Started Building LSTM RNN Model - 
+00:17  Started Training the model
+### Batch Size: 24 | LSTM Units: 64 | Iterations: 70000 | Dimensions: 300 | MaxWords: 300 | Optimizer: GRDSC 0.1 ###
+00:09:20 Saved to models/trained_lstm.ckpt-1000 | Loss:  0.682509
+00:18:20 Saved to models/trained_lstm.ckpt-2000 | Loss:  0.720569
+00:27:14 Saved to models/trained_lstm.ckpt-3000 | Loss:  0.694883
+00:36:09 Saved to models/trained_lstm.ckpt-4000 | Loss:  0.624873
+00:44:42 Saved to models/trained_lstm.ckpt-5000 | Loss:  0.733085
+00:53:16 Saved to models/trained_lstm.ckpt-6000 | Loss:  0.71918
+01:02:09 Saved to models/trained_lstm.ckpt-7000 | Loss:  0.717982
+01:11:06 Saved to models/trained_lstm.ckpt-8000 | Loss:  0.601484
+01:19:43 Saved to models/trained_lstm.ckpt-9000 | Loss:  0.824917
+01:28:29 Saved to models/trained_lstm.ckpt-10000 | Loss:  0.581578
+01:37:14 Saved to models/trained_lstm.ckpt-11000 | Loss:  0.252672
+01:45:59 Saved to models/trained_lstm.ckpt-12000 | Loss:  0.388155
+01:54:49 Saved to models/trained_lstm.ckpt-13000 | Loss:  0.583966
+02:03:34 Saved to models/trained_lstm.ckpt-14000 | Loss:  0.253428
+02:11:58 Saved to models/trained_lstm.ckpt-15000 | Loss:  0.457528
+02:21:34 Saved to models/trained_lstm.ckpt-16000 | Loss:  0.310097
+02:30:20 Saved to models/trained_lstm.ckpt-17000 | Loss:  0.468719
+02:38:52 Saved to models/trained_lstm.ckpt-18000 | Loss:  0.350898
+02:47:33 Saved to models/trained_lstm.ckpt-19000 | Loss:  0.175785
+02:56:21 Saved to models/trained_lstm.ckpt-20000 | Loss:  0.262598
+03:07:07 Saved to models/trained_lstm.ckpt-21000 | Loss:  0.303028
+03:16:03 Saved to models/trained_lstm.ckpt-22000 | Loss:  0.577335
+03:25:00 Saved to models/trained_lstm.ckpt-23000 | Loss:  0.43734
+03:34:02 Saved to models/trained_lstm.ckpt-24000 | Loss:  0.472782
+03:42:58 Saved to models/trained_lstm.ckpt-25000 | Loss:  0.472625
+03:51:55 Saved to models/trained_lstm.ckpt-26000 | Loss:  0.236385
+04:01:00 Saved to models/trained_lstm.ckpt-27000 | Loss:  0.292997
+04:10:02 Saved to models/trained_lstm.ckpt-28000 | Loss:  0.554005
+04:19:25 Saved to models/trained_lstm.ckpt-29000 | Loss:  0.20042
+04:28:26 Saved to models/trained_lstm.ckpt-30000 | Loss:  0.239247
+04:37:33 Saved to models/trained_lstm.ckpt-31000 | Loss:  0.169857
+04:46:23 Saved to models/trained_lstm.ckpt-32000 | Loss:  0.178689
+04:55:26 Saved to models/trained_lstm.ckpt-33000 | Loss:  0.508025
+05:04:16 Saved to models/trained_lstm.ckpt-34000 | Loss:  0.29898
+05:13:05 Saved to models/trained_lstm.ckpt-35000 | Loss:  0.337826
+05:21:50 Saved to models/trained_lstm.ckpt-36000 | Loss:  0.385617
+05:30:46 Saved to models/trained_lstm.ckpt-37000 | Loss:  0.245239
+05:39:41 Saved to models/trained_lstm.ckpt-38000 | Loss:  0.171239
+05:48:23 Saved to models/trained_lstm.ckpt-39000 | Loss:  0.244879
+05:57:08 Saved to models/trained_lstm.ckpt-40000 | Loss:  0.233044
+06:05:48 Saved to models/trained_lstm.ckpt-41000 | Loss:  0.0915342
+06:14:47 Saved to models/trained_lstm.ckpt-42000 | Loss:  0.365922
+06:23:31 Saved to models/trained_lstm.ckpt-43000 | Loss:  0.452678
+06:32:22 Saved to models/trained_lstm.ckpt-44000 | Loss:  0.155878
+06:41:11 Saved to models/trained_lstm.ckpt-45000 | Loss:  0.291244
+06:50:05 Saved to models/trained_lstm.ckpt-46000 | Loss:  0.230482
+06:58:54 Saved to models/trained_lstm.ckpt-47000 | Loss:  0.165384
+07:07:39 Saved to models/trained_lstm.ckpt-48000 | Loss:  0.235078
+07:16:41 Saved to models/trained_lstm.ckpt-49000 | Loss:  0.214298
+07:25:29 Saved to models/trained_lstm.ckpt-50000 | Loss:  0.236138
+07:34:09 Saved to models/trained_lstm.ckpt-51000 | Loss:  0.159509
+07:42:49 Saved to models/trained_lstm.ckpt-52000 | Loss:  0.139972
+07:51:39 Saved to models/trained_lstm.ckpt-53000 | Loss:  0.17629
+08:00:24 Saved to models/trained_lstm.ckpt-54000 | Loss:  0.283907
+08:09:08 Saved to models/trained_lstm.ckpt-55000 | Loss:  0.205073
+08:17:54 Saved to models/trained_lstm.ckpt-56000 | Loss:  0.148718
+08:26:40 Saved to models/trained_lstm.ckpt-57000 | Loss:  0.116808
+08:35:26 Saved to models/trained_lstm.ckpt-58000 | Loss:  0.0566706
+08:44:03 Saved to models/trained_lstm.ckpt-59000 | Loss:  0.341081
+08:52:43 Saved to models/trained_lstm.ckpt-60000 | Loss:  0.288048
+09:01:13 Saved to models/trained_lstm.ckpt-61000 | Loss:  0.160213
+09:10:10 Saved to models/trained_lstm.ckpt-62000 | Loss:  0.246665
+09:19:50 Saved to models/trained_lstm.ckpt-63000 | Loss:  0.102719
+09:28:23 Saved to models/trained_lstm.ckpt-64000 | Loss:  0.180103
+09:36:40 Saved to models/trained_lstm.ckpt-65000 | Loss:  0.101409
+09:44:58 Saved to models/trained_lstm.ckpt-66000 | Loss:  0.259602
+09:53:04 Saved to models/trained_lstm.ckpt-67000 | Loss:  0.202285
+10:01:07 Saved to models/trained_lstm.ckpt-68000 | Loss:  0.383614
+10:09:09 Saved to models/trained_lstm.ckpt-69000 | Loss:  0.118638
+14:50:23  Completed Training the model
+14:50:24  Running Model on partitioned test data
+Accuracy for this Test batch: 91.6666686535
+Accuracy for this Test batch: 91.6666686535
+Accuracy for this Test batch: 87.5
+Accuracy for this Test batch: 83.3333313465
+Accuracy for this Test batch: 79.1666686535
+Accuracy for this Test batch: 83.3333313465
+Accuracy for this Test batch: 75.0
+Accuracy for this Test batch: 91.6666686535
+Accuracy for this Test batch: 91.6666686535
+Accuracy for this Test batch: 83.3333313465
+
+ 2017-12-11 10:48:26.795397  - Vectorizing all Hand-tagged Test Articles Started - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 151
+The total number of words in the Test files is 3860
+
+ Processing Hand-tagged Corpus
+00:01  Positive Test files vectorization finished!
+00:03  Negative Test files vectorization finished!
+00:03 -- Vectorized Hand-tagged Test Saved --  ( 2017-12-11 10:48:33 )
+
+ 2017-12-11 10:48:33.288220  - Vectorizing all Hand-tagged Test Articles Started - 
+Loaded the word list!
+Loaded the word vectors!
+00:00  Pre-processing Test Articles!
+The total number of Test files is 151
+The total number of words in the Test files is 3860
+
+ Processing Hand-tagged Corpus
+00:01  Positive Test files vectorization finished!
+00:01  Negative Test files vectorization finished!
+00:01 -- Vectorized Hand-tagged Test Saved --  ( 2017-12-11 10:48:36 )
+
+ 14:50:35  Running Model on hand tagged data
+Accuracy for this Custom Test batch: 66.6666686535
+Accuracy for this Custom Test batch: 62.5
+Accuracy for this Custom Test batch: 66.6666686535
+Accuracy for this Custom Test batch: 66.6666686535
+Accuracy for this Custom Test batch: 62.5
+Accuracy for this Custom Test batch: 87.5
+Accuracy for this Custom Test batch: 70.8333313465
+Accuracy for this Custom Test batch: 62.5
+Accuracy for this Custom Test batch: 66.6666686535
+Accuracy for this Custom Test batch: 62.5
+14:50:48 -- Evaluation Completed --  ( 2017-12-11 10:48:48 )

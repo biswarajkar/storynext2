@@ -22,8 +22,8 @@ from os import listdir
 from os.path import isfile, join
 
 # Create a list of Positive and Negative File names
-positiveFiles = ['positiveReviews/' + f for f in listdir('positiveReviews/') if isfile(join('positiveReviews/', f))]
-negativeFiles = ['negativeReviews/' + f for f in listdir('negativeReviews/') if isfile(join('negativeReviews/', f))]
+positiveFiles = ['../training_corpus/positive/' + f for f in listdir('../training_corpus/positive/') if isfile(join('../training_corpus/positive/', f))]
+negativeFiles = ['../training_corpus/negative/' + f for f in listdir('../training_corpus/negative/') if isfile(join('../training_corpus/negative/', f))]
 
 # ------------------------------
 # Get Training Corpus Statistics

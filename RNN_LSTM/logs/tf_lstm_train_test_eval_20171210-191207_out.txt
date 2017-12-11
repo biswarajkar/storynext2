@@ -1,0 +1,5 @@
+
+ 2017-12-10 19:12:07.287790  - Started Building LSTM RNN Model - 
+00:18  Started Training the model
+### Batch Size: 24 | LSTM Units: 64 | Iterations: 70000 | Dimensions: 300 | MaxWords: 300 | Optimizer: GRDSC 0.1 ###
+00:09:24 Saved to models/trained_lstm.ckpt-1000 | Loss:  0.70872
