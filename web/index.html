@@ -6,9 +6,18 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="js/Chart.min.js"></script>
+    <script src="js/chartjs-plugin-annotation.min.js"></script>
+    <script src="js/valence_arousal_charts.js"></script>
+
+
+
+
     <!--  Style Imports -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/d3_styles.css">
+    <link rel="stylesheet" href="css/word_cloud_styles.css">
 
     <!--  HTML Element Styles -->
     <style>
@@ -57,10 +66,6 @@
     </style>
 
     <!--  JS Imports -->
-    <script
-            src="https://code.jquery.com/jquery-3.2.1.js"
-            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
-            crossorigin="anonymous"></script>
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="lib/d3.layout.cloud.js"></script>
     <script src="lib/colorbrewer.js"></script>
@@ -113,27 +118,62 @@
 <hr style="clear: both">
 
 <div id="viz-area">
-    <table width="100%">
-        <tr>
-            <td width="70%"><!-- Visualization Area -->
-                <div style="float: left" id="wordcloud"></div>
-            </td>
-            <td width="30%"><!-- Top 10 List Area -->
-                <h5>Top 10 most frequently occurring words</h5>
-                <div style="float: left" id="list-area"></div>
-            </td>
-        </tr>
-    </table>
-</div>
 
-<hr style="clear: both">
+    <div id="word_cloud_container" class="container">
+        <!-- word cloud & per-sentence/per-word sentiments -->
+        <div class="row">
+            <div class="col-md-7" style="margin-top:22px">
+                <div style="" id="wordcloud"></div>
+            </div>
+            <div class="col-md-5">
+                <div class="row">
+                    <div class="col-md-12">
+                        <canvas id="per_sentence_sentiment" style="height:400px;width:content-box"></canvas>
+                    </div>
+                </div>
+                <div class="row" style="padding-top:50px">
+                    <div class="col-md-12">
+                        <canvas id="per_word_sentiment" style="height:200px;width:content-box"></canvas>
+                    </div>
+                    <!-- Tool tips
+                    <div class="col-md-6">
+                        <b>Valence:     </b><div id="per_sentence_sentiment_valence_tooltip" style="display:inline"></div>
+                        <br>
+                        <b>Arousal:     </b><div id="per_sentence_sentiment_arousal_tooltip" style="display:inline"></div>
+                        <br>
+                        <b>Sentence:     </b><div id="per_sentence_sentiment_sentence_tooltip" style="display:inline"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <b>Valence:     </b><div id="per_word_sentiment_valence_tooltip" style="display:inline"></div>
+                        <br>
+                        <b>Arousal:     </b><div id="per_word_sentiment_arousal_tooltip" style="display:inline"></div>
+                        <br>
+                        <b>Domain:     </b><div id="per_word_sentiment_sentence_tooltip" style="display:inline"></div>
+                    </div>
+                    -->
+                </div>
+            </div>
+        </div>
+
+        <hr style="clear: both">
 
 
-<!-- Slider Area -->
-<div id="silider-area">
-    <b>Percentage of Words Displayed:</b>
-    <input type="range" min=0, max="100" , step="2" , value="100" id="slider" style="slider"/>
-    <output id="slider">100%</output>
+        <!-- Slider Area -->
+        <div id="silider-area">
+            <b>Percentage of Words Displayed:</b>
+            <input type="range" min=0, max="100" , step="2" , value="100" id="slider" style="slider"/>
+            <output id="slider">100%</output>
+        </div>
+
+        <!-- sentiment-over-time analysis -->
+        <div class="row" style="margin-top:60px">
+            <div class="col-md-12">
+                <canvas id="sentiment-over-time-chart" style="height:400px;width:content-box"></canvas>
+            </div>
+        </div>
+
+    </div>
+
 </div>
 
 
@@ -151,8 +191,7 @@
             </textarea>
                 <br>
                 <button id="go_button" type="button" class="button go">Go!</button>
-            <div id="testAjax"></div>
-            <button id="reset_button" type="button" class="button reset">Reset to Sample Text</button>
+                <button id="reset_button" type="button" class="button reset">Reset to Sample Text</button>
         </div>
     </div>
 
@@ -172,21 +211,11 @@
 
 <!--  D3 Code -->
 <script>
-    $(".go").on("click", function () {
-        $.ajax({
-            url: "cgi-bin/testAjax.cgi",
-            type: "POST",
-            data: {content: $("#text-input").val(), bar: 'bar'},
-            success: function (response) {
-                $("#testAjax").html(response);
-                alert(response);
-            }
-        });
-    })
+
     //HTML ELEMENT DATA
     var sample_text = "Northeastern University (NU, formerly NEU) is a private research university in Boston, Massachusetts, established in 1898. It is categorized as an R1 institution (Doctoral Universities: Highest Research Activity) by the Carnegie Classification of Institutions of Higher Education. The university offers undergraduate and graduate programs on its main campus in the Fenway-Kenmore, Roxbury, South End, and Back Bay neighborhoods of Boston. The university has satellite campus in Charlotte, North Carolina, Seattle, Washington, and Silicon Valley, California that exclusively offer graduate degrees. An additional satellite campus will open in Toronto, Canada in late 2016. The university's enrollment is approximately 18,000 undergraduate students and 7,000 graduate students. Northeastern features a cooperative education program that integrates classroom study with professional experience on seven continents and a comprehensive study abroad program. In 2011, the university opened the George J. Kostas Research Institute for Homeland Security. The Interdisciplinary Science and Engineering Complex will open in early 2017."
     var cloud_element = 'wordcloud';
-    var list_element = 'list-area';
+    // # var list_element='list-area';
     var text_area_element = 'text-input';
     var font_element = 'font_select';
     var slider_element = 'slider';
@@ -198,13 +227,13 @@
 
 
     //CLOUD PROPERTIES
-    var list_element_width = document.getElementById(list_element).getBoundingClientRect().width;
-    var list_element_height = document.getElementById(list_element).getBoundingClientRect().height;
+    // # var list_element_width=document.getElementById(list_element).getBoundingClientRect().width;
+    // # var list_element_height=document.getElementById(list_element).getBoundingClientRect().height;
     var viz_element_height = document.getElementById(cloud_element).getBoundingClientRect().height;
     var viz_element_width = document.getElementById(cloud_element).getBoundingClientRect().width;
     var cloud_padding = 5;
     var cloud_rotation = 10;
-    var viz_height = 750;
+    var viz_height = 650;
     var viz_width = 400;
     var def_cloud_color = d3.scale.category20();    //Default Cloud Color Range (Cat 20)
     var def_sentiment_col = d3.scale.linear()
@@ -230,175 +259,159 @@
         //------------------------------------------------------------------------------------------------------------//
         //----------LIST SVG CODE-------------------------------------------------------------------------------------//
         //------------------------------------------------------------------------------------------------------------//
+        /*
+         var input_list=getTopNbySize(getFrequencyList(d3.select("#"+text_area_element).node().value,d3.select(sentiment_element).node().checked,d3.select(key_phrase_element).node().checked),12);
 
-        var input_list = getTopNbySize(getFrequencyList(d3.select("#" + text_area_element).node().value, d3.select(sentiment_element).node().checked, d3.select(key_phrase_element).node().checked), 12);
+         //Audit List Properties
+         //console.log("==> List: LEN:"+input_list.length+"|WD:"+list_element_width+"|HT:"+list_element_height);
 
-        //Audit List Properties
-        console.log("==> List: LEN:" + input_list.length + "|WD:" + list_element_width + "|HT:" + list_element_height);
+         //Set size variables
+         var width = 300;
+         var height = viz_width;
+         var xLabelPadding=3;
+         var axisMargin = 0;
+         //var margin = {top: (parseInt(d3.select('#'+list_element).style('height'), 10)/20), right: (parseInt(d3.select('#'+list_element).style('width'), 10)/20), bottom: (parseInt(d3.select('#'+list_element).style('height'), 10)/20), left: (parseInt(d3.select('#'+list_element).style('width'), 10)/5)};
+         var max_freq_list=d3.max(input_list, function(d) { return d.size; });
 
-        //Set size variables
-        var width = 300;
-        var height = viz_width;
-        var xLabelPadding = 3;
-        var axisMargin = 0;
-        var margin = {
-            top: (parseInt(d3.select('#' + list_element).style('height'), 10) / 20),
-            right: (parseInt(d3.select('#' + list_element).style('width'), 10) / 20),
-            bottom: (parseInt(d3.select('#' + list_element).style('height'), 10) / 20),
-            left: (parseInt(d3.select('#' + list_element).style('width'), 10) / 5)
-        };
-        var max_freq_list = d3.max(input_list, function (d) {
-            return d.size;
-        });
+         //Set up scales
+         var xScale = d3.scale.linear()
+         .range([0, width])
+         .clamp(true);
 
-        //Set up scales
-        var xScale = d3.scale.linear()
-            .range([0, width])
-            .clamp(true);
+         var yScale = d3.scale.ordinal()
+         .rangeRoundBands([0, height], 0.1);
 
-        var yScale = d3.scale.ordinal()
-            .rangeRoundBands([0, height], 0.1);
+         var col = d3.scale.ordinal()
+         .range(colorbrewer.Blues[11]);
 
-        var col = d3.scale.ordinal()
-            .range(colorbrewer.Blues[11]);
+         //Set up axes
+         var xAxis = d3.svg.axis()
+         .scale(xScale)
+         .tickSize(-height)
+         .orient("bottom");
 
-        //Set up axes
-        var xAxis = d3.svg.axis()
-            .scale(xScale)
-            .tickSize(-height)
-            .orient("bottom");
+         var yAxis = d3.svg.axis()
+         .scale(yScale)
+         .innerTickSize(0)
+         .orient("right");
 
-        var yAxis = d3.svg.axis()
-            .scale(yScale)
-            .innerTickSize(0)
-            .orient("right");
+         barHeight = height * 0.4/input_list.length;
 
-        barHeight = height * 0.4 / input_list.length;
+         //Render List Element
 
-        //Render List Element
-        list_svg = d3.select("#" + list_element)
-            .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+         list_svg = d3.select("#"+list_element)
+         .append("svg")
+         .attr("width", width + margin.left + margin.right)
+         .attr("height", height + margin.top + margin.bottom)
+         .append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        list_svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
+         list_svg.append("g")
+         .attr("class", "x axis")
+         .attr("transform", "translate(0," + height + ")")
+         .call(xAxis);
 
-        function update(dataset) {
+         function update(dataset) {
 
-            //Remove blanks
-            dataset.filter(function (dt) {
-                return (dt.text !== "");
-            });
+         //Remove blanks
+         dataset.filter(function (dt) {
+         return (dt.text !== "");
+         });
 
-            max_freq_list = d3.max(dataset, function (d) {
-                return d.size;
-            });
+         max_freq_list=d3.max(dataset, function(d) { return d.size; });
 
-            //Recompute Scales
-            xScale.domain([0, max_freq_list]);
-            yScale.domain(dataset.map(function (d) {
-                return d.text;
-            }));
-            col.domain(dataset.map(function (d) {
-                return d.size;
-            }));
+         //Recompute Scales
+         xScale.domain([0, max_freq_list]);
+         yScale.domain(dataset.map(function(d) { return d.text; }));
+         col.domain(dataset.map(function(d) { return d.size; }));
 
 
-            //Add the Axes
-            list_svg.append("g")
-                .attr("class", "x axis")
-                .attr("transform", "translate(0," + height + ")")
-                .call(xAxis);
+         //Add the Axes
 
-            list_svg.select(".y.axis").remove();
-            list_svg.select(".x.axis").remove();
+         list_svg.append("g")
+         .attr("class", "x axis")
+         .attr("transform", "translate(0," + height + ")")
+         .call(xAxis);
 
-
-            var bar = list_svg.selectAll(".bar")
-                .data(dataset, function (d) {
-                    return d.text;
-                });
-
-            //Bars
-            bar.enter().append("rect")
-                .attr("class", "bar")
-                .attr("x", 0)
-                .attr("y", function (d, i) {
-                    return yScale(d.text);
-                })
-                .attr("width", function (d) {
-                    return xScale(d.size);
-                })
-                //.style("fill", function(d,i) { return col(d.size); })
-                .attr("height", yScale.rangeBand());
-
-            bar
-                .on("mousemove", function (d) {
-                    div_list.style("left", d3.event.pageX - 15 + "px");
-                    div_list.style("top", d3.event.pageY - 40 + "px");
-                    div_list.style("display", "inline-block");
-                    div_list.html("Occurs <b>" + d.size + "</b> times");
-                });
-            bar
-                .on("mouseout", function (d) {
-                    div_list.style("display", "none");
-                });
-
-            bar.exit().remove();
-
-            bar.transition()
-                .duration(750)
-                .attr("x", function (d) {
-                    return 0;
-                })
-                .attr("y", function (d) {
-                    return yScale(d.text);
-                })
-                .attr("width", function (d) {
-                    return xScale(d.size);
-                })
-                .attr("height", yScale.rangeBand());
-            bar
-                .append("text")
-                .style("font-family", font_param)
-                .style("font-size", function (d) {
-                    return yScale.rangeBand() / 2 + "px";
-                })
-                .attr("class", "label")
-                .text(function (d) {
-                    return d.text;
-                });
-
-            //Axis Labels
-            bar
-                .append("text")
-                .style("font-family", font_param)
-                .style("font-size", function (d) {
-                    return yScale.rangeBand() / 2 + "px";
-                })
-                .attr("class", "label")
-                .attr("x", xLabelPadding)
-                .attr("y", function (d, i) {
-                    return yScale(d.text) + yScale.rangeBand() / 2;
-                })
-                .text(function (d) {
-                    return d.text;
-                })
-                .attr("fill", "red")
-                .attr("dy", ".35em"); //vertical align middle
+         list_svg.select(".y.axis").remove();
+         list_svg.select(".x.axis").remove();
 
 
-            list_svg.append("g")
-                .attr("class", "y axis")
-                .call(yAxis);
-        }
+         var bar = list_svg.selectAll(".bar")
+         .data(dataset, function (d) {
+         return d.text;
+         });
 
 
+         //Bars
+         bar.enter().append("rect")
+         .attr("class", "bar")
+         .attr("x", 0)
+         .attr("y", function (d, i) {
+         return yScale(d.text);
+         })
+         .attr("width", function (d) {
+         return xScale(d.size);
+         })
+         //.style("fill", function(d,i) { return col(d.size); })
+         .attr("height", yScale.rangeBand());
+
+         bar
+         .on("mousemove", function(d){
+         div_list.style("left", d3.event.pageX-15+"px");
+         div_list.style("top", d3.event.pageY-40+"px");
+         div_list.style("display", "inline-block");
+         div_list.html("Occurs <b>"+d.size+"</b> times");
+         });
+         bar
+         .on("mouseout", function(d){
+         div_list.style("display", "none");
+         });
+
+         bar.exit().remove();
+
+         bar.transition()
+         .duration(750)
+         .attr("x", function(d) { return 0; })
+         .attr("y", function(d) { return yScale(d.text); })
+         .attr("width", function(d) { return xScale(d.size); })
+         .attr("height", yScale.rangeBand());
+         bar
+         .append("text")
+         .style("font-family", font_param)
+         .style("font-size", function (d) {
+         return yScale.rangeBand() / 2 + "px";
+         })
+         .attr("class", "label")
+         .text(function (d) {
+         return d.text;
+         });
+
+         //Axis Labels
+         bar
+         .append("text")
+         .style("font-family", font_param)
+         .style("font-size", function (d) {
+         return yScale.rangeBand() / 2 + "px";
+         })
+         .attr("class", "label")
+         .attr("x", xLabelPadding)
+         .attr("y", function (d, i) {
+         return yScale(d.text) + yScale.rangeBand() / 2;
+         })
+         .text(function (d) {
+         return d.text;
+         })
+         .attr("fill", "red")
+         .attr("dy", ".35em"); //vertical align middle
+
+
+         list_svg.append("g")
+         .attr("class", "y axis")
+         .call(yAxis);
+         }
+
+         */
         //------------------------------------------------------------------------------------------------------------//
         //---------CLOUD SVG CODE-------------------------------------------------------------------------------------//
         //------------------------------------------------------------------------------------------------------------//
@@ -487,7 +500,7 @@
             var cloud_text = JSON.parse(JSON.stringify(frequency_list));
 
             //Update the Top 10 List
-            update(getTopNbySize(frequency_list, 10));
+            //update(getTopNbySize(frequency_list,10));
 
             //Update the Cloud
             cloudLayout = d3.layout.cloud()
@@ -597,6 +610,7 @@
         d3.select(go_button_element)
             .on("click", function (d) {
                 updateCloud();
+                // AJAX calls to update charts
             });
 
 
