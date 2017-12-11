@@ -61,16 +61,15 @@ def run(dir):
     # max_df = 0.8, discard words appering in more than 80 % of the documents
     # sublinear_tf = True, use sublinear weighting
     # use_idf = True, enable IDF
-    vectorizer = TfidfVectorizer(max_features=40000,
-                                 min_df=5,
+    vectorizer = TfidfVectorizer(min_df=5,
                                  max_df=0.8,
                                  sublinear_tf=True,
                                  use_idf=True)
-    vectorizer2 = CountVectorizer(max_features=40000,
-                                 min_df=5,
-                                 max_df=0.8)
-    train_vectors = vectorizer2.fit_transform(train_data)
-    test_vectors = vectorizer2.transform(test_data)
+    # vectorizer2 = CountVectorizer(max_features=40000,
+    #                              min_df=5,
+    #                              max_df=0.8)
+    train_vectors = vectorizer.fit_transform(train_data)
+    test_vectors = vectorizer.transform(test_data)
 
     # # Perform classification with SVM, kernel=rbf
     # classifier_rbf = svm.SVC()

@@ -1,0 +1,1 @@
+This folder contains all the hand-tagged test data classified into "Positive" and "Negative" sentiment.
